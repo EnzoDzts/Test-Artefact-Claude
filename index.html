@@ -1,25 +1,1977 @@
-# GENERATED FROM XML -- DO NOT EDIT
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Manager</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; background: #f8fafc; }
+  html.dark body { background: #0f172a; color: #f1f5f9; }
+  .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  
+  /* Dark mode manual overrides (pour Tailwind v2 sans dark: variants) */
+  html.dark .dark\:bg-slate-900 { background-color: #0f172a; }
+  html.dark .dark\:bg-slate-800 { background-color: #1e293b; }
+  html.dark .dark\:bg-slate-700 { background-color: #334155; }
+  html.dark .dark\:bg-slate-600 { background-color: #475569; }
+  html.dark .dark\:bg-blue-900\/20 { background-color: rgba(30, 58, 138, 0.2); }
+  html.dark .dark\:bg-blue-900\/30 { background-color: rgba(30, 58, 138, 0.3); }
+  html.dark .dark\:bg-blue-900\/40 { background-color: rgba(30, 58, 138, 0.4); }
+  html.dark .dark\:bg-blue-900\/50 { background-color: rgba(30, 58, 138, 0.5); }
+  html.dark .dark\:bg-amber-900\/20 { background-color: rgba(120, 53, 15, 0.2); }
+  html.dark .dark\:bg-amber-900\/40 { background-color: rgba(120, 53, 15, 0.4); }
+  html.dark .dark\:bg-green-900\/20 { background-color: rgba(20, 83, 45, 0.2); }
+  html.dark .dark\:bg-green-900\/40 { background-color: rgba(20, 83, 45, 0.4); }
+  html.dark .dark\:bg-red-900\/20 { background-color: rgba(127, 29, 29, 0.2); }
+  html.dark .dark\:bg-red-900\/40 { background-color: rgba(127, 29, 29, 0.4); }
+  html.dark .dark\:bg-orange-900\/20 { background-color: rgba(124, 45, 18, 0.2); }
+  html.dark .dark\:bg-orange-900\/40 { background-color: rgba(124, 45, 18, 0.4); }
+  html.dark .dark\:bg-purple-900\/40 { background-color: rgba(88, 28, 135, 0.4); }
+  html.dark .dark\:bg-pink-900\/40 { background-color: rgba(131, 24, 67, 0.4); }
+  html.dark .dark\:bg-indigo-900\/40 { background-color: rgba(49, 46, 129, 0.4); }
+  html.dark .dark\:bg-teal-900\/40 { background-color: rgba(19, 78, 74, 0.4); }
+  html.dark .dark\:bg-cyan-900\/40 { background-color: rgba(22, 78, 99, 0.4); }
+  html.dark .dark\:bg-rose-900\/40 { background-color: rgba(136, 19, 55, 0.4); }
+  html.dark .dark\:bg-slate-900\/30 { background-color: rgba(15, 23, 42, 0.3); }
+  html.dark .dark\:bg-slate-900\/50 { background-color: rgba(15, 23, 42, 0.5); }
+  html.dark .dark\:bg-slate-700\/50 { background-color: rgba(51, 65, 85, 0.5); }
+  
+  html.dark .dark\:text-slate-100 { color: #f1f5f9; }
+  html.dark .dark\:text-slate-200 { color: #e2e8f0; }
+  html.dark .dark\:text-slate-300 { color: #cbd5e1; }
+  html.dark .dark\:text-slate-400 { color: #94a3b8; }
+  html.dark .dark\:text-white { color: #ffffff; }
+  html.dark .dark\:text-blue-300 { color: #93c5fd; }
+  html.dark .dark\:text-blue-400 { color: #60a5fa; }
+  html.dark .dark\:text-green-400 { color: #4ade80; }
+  html.dark .dark\:text-red-300 { color: #fca5a5; }
+  html.dark .dark\:text-red-400 { color: #f87171; }
+  html.dark .dark\:text-orange-400 { color: #fb923c; }
+  html.dark .dark\:text-amber-300 { color: #fcd34d; }
+  html.dark .dark\:text-purple-300 { color: #d8b4fe; }
+  html.dark .dark\:text-pink-300 { color: #f9a8d4; }
+  html.dark .dark\:text-indigo-300 { color: #a5b4fc; }
+  html.dark .dark\:text-teal-300 { color: #5eead4; }
+  html.dark .dark\:text-cyan-300 { color: #67e8f9; }
+  html.dark .dark\:text-rose-300 { color: #fda4af; }
+  
+  html.dark .dark\:border-slate-600 { border-color: #475569; }
+  html.dark .dark\:border-slate-700 { border-color: #334155; }
+  html.dark .dark\:border-blue-700 { border-color: #1d4ed8; }
+  html.dark .dark\:border-blue-800 { border-color: #1e40af; }
+  html.dark .dark\:ring-red-800 { --tw-ring-color: #991b1b; }
+  html.dark .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
+  html.dark .dark\:hover\:text-slate-100:hover { color: #f1f5f9; }
+  html.dark .dark\:hover\:text-slate-200:hover { color: #e2e8f0; }
+  html.dark .dark\:hover\:text-slate-300:hover { color: #cbd5e1; }
+  html.dark .dark\:hover\:bg-slate-600:hover { background-color: #475569; }
+  html.dark .dark\:hover\:bg-slate-700:hover { background-color: #334155; }
+  html.dark .dark\:hover\:bg-blue-900\/30:hover { background-color: rgba(30, 58, 138, 0.3); }
+  html.dark .dark\:hover\:bg-blue-900\/50:hover { background-color: rgba(30, 58, 138, 0.5); }
+  html.dark .dark\:hover\:bg-slate-900\/50:hover { background-color: rgba(15, 23, 42, 0.5); }
+  html.dark .dark\:hover\:bg-slate-900:hover { background-color: #0f172a; }
+  html.dark .dark\:ring-offset-slate-900 { --tw-ring-offset-color: #0f172a; }
+  
+  /* Utility classes that don't exist in Tailwind v2 */
+  .min-h-screen { min-height: 100vh; }
+  .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
+  .from-blue-500 { --tw-gradient-from: #3b82f6; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59, 130, 246, 0)); }
+  .to-indigo-600 { --tw-gradient-to: #4f46e5; }
+  .ring-1 { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), 0 0 #0000; }
+  .ring-2 { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), 0 0 #0000; }
+  .ring-red-300 { --tw-ring-color: #fca5a5; }
+  .ring-blue-400 { --tw-ring-color: #60a5fa; }
+  .ring-offset-2 { --tw-ring-offset-width: 2px; }
+  .ring-offset-slate-50 { --tw-ring-offset-color: #f8fafc; }
+  .aspect-square { aspect-ratio: 1 / 1; }
+  .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+  .transition-colors { transition-property: background-color, border-color, color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+  .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+  .transition-shadow { transition-property: box-shadow; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+  .duration-300 { transition-duration: 300ms; }
+  .accent-blue-500 { accent-color: #3b82f6; }
+  .backdrop-blur { backdrop-filter: blur(8px); }
+  .gap-0\.5 { gap: 0.125rem; }
+  .gap-1\.5 { gap: 0.375rem; }
+  .gap-2\.5 { gap: 0.625rem; }
+  .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+  .px-1\.5 { padding-left: 0.375rem; padding-right: 0.375rem; }
+  .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+  .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+  .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+  .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+  .mt-1\.5 { margin-top: 0.375rem; }
+  .mb-1\.5 { margin-bottom: 0.375rem; }
+  .pl-1\.5 { padding-left: 0.375rem; }
+  .text-\[10px\] { font-size: 10px; }
+  .text-\[11px\] { font-size: 11px; }
+  .text-\[9px\] { font-size: 9px; }
+  .text-\[8px\] { font-size: 8px; }
+  .min-w-\[200px\] { min-width: 200px; }
+  .min-w-\[150px\] { min-width: 150px; }
+  .min-w-\[120px\] { min-width: 120px; }
+  .min-w-\[180px\] { min-width: 180px; }
+  .min-w-\[280px\] { min-width: 280px; }
+  .min-w-\[320px\] { min-width: 320px; }
+  .min-h-\[60px\] { min-height: 60px; }
+  .min-h-\[100px\] { min-height: 100px; }
+  .max-w-sm { max-width: 24rem; }
+  .max-w-md { max-width: 28rem; }
+  .max-w-lg { max-width: 32rem; }
+  .max-w-3xl { max-width: 48rem; }
+  .max-w-7xl { max-width: 80rem; }
+  .max-h-\[80vh\] { max-height: 80vh; }
+  .max-h-\[85vh\] { max-height: 85vh; }
+  .w-px { width: 1px; }
+  .w-4 { width: 1rem; }
+  .w-14 { width: 3.5rem; }
+  .w-16 { width: 4rem; }
+  .w-32 { width: 8rem; }
+  .w-48 { width: 12rem; }
+  .w-80 { width: 20rem; }
+  .h-px { height: 1px; }
+  .h-1\.5 { height: 0.375rem; }
+  .h-4 { height: 1rem; }
+  .z-10 { z-index: 10; }
+  .z-20 { z-index: 20; }
+  .z-50 { z-index: 50; }
+  .pt-20 { padding-top: 5rem; }
+  .tracking-wide { letter-spacing: 0.025em; }
+  .uppercase { text-transform: uppercase; }
+  .capitalize { text-transform: capitalize; }
+  .whitespace-pre-wrap { white-space: pre-wrap; }
+  .cursor-move { cursor: move; }
+  .cursor-pointer { cursor: pointer; }
+  .cursor-default { cursor: default; }
+  .select-none { user-select: none; }
+  .opacity-0 { opacity: 0; }
+  .opacity-40 { opacity: 0.4; }
+  .opacity-60 { opacity: 0.6; }
+  .opacity-70 { opacity: 0.7; }
+  .opacity-75 { opacity: 0.75; }
+  .opacity-90 { opacity: 0.9; }
+  .group:hover .group-hover\:opacity-100 { opacity: 1; }
+  .group\/tag:hover .group-hover\/tag\:opacity-100 { opacity: 1; }
+  .group\/st:hover .group-hover\/st\:opacity-100 { opacity: 1; }
+  .shrink-0 { flex-shrink: 0; }
+  .rotate-90 { transform: rotate(90deg); }
+  .rotate-180 { transform: rotate(180deg); }
+  .-translate-x-1\/2 { transform: translateX(-50%); }
+  .-translate-y-1\/2 { transform: translateY(-50%); }
+  .top-1\/2 { top: 50%; }
+  .left-1\/2 { left: 50%; }
+  .-top-1 { top: -0.25rem; }
+  .-right-1 { right: -0.25rem; }
+  .top-full { top: 100%; }
+  .left-0 { left: 0; }
+  .right-0 { right: 0; }
+  .right-3 { right: 0.75rem; }
+  .left-3 { left: 0.75rem; }
+  .top-0 { top: 0; }
+  .bottom-0 { bottom: 0; }
+  .inset-0 { inset: 0; }
+  .bg-black\/50 { background-color: rgba(0, 0, 0, 0.5); }
+  .bg-white\/20 { background-color: rgba(255, 255, 255, 0.2); }
+  .bg-white\/60 { background-color: rgba(255, 255, 255, 0.6); }
+  .bg-black\/20 { background-color: rgba(0, 0, 0, 0.2); }
+  .ring-inset { --tw-ring-inset: inset; }
+  .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+  .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+  .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+  .hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+  kbd { font-family: ui-monospace, monospace; }
+</style>
+</head>
+<body>
+<div id="root"></div>
 
-URI: index.html.en
-Content-Language: en
-Content-type: text/html; charset=UTF-8
+<script type="text/babel" data-type="module">
+const { useState, useEffect, useMemo, useRef } = React;
 
-URI: index.html.es
-Content-Language: es
-Content-type: text/html; charset=ISO-8859-1
+// ============ Inline SVG Icons (remplace lucide-react) ============
+const Icon = ({ d, size = 16, className = '', ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>
+    {d}
+  </svg>
+);
+const Plus = (p) => <Icon {...p} d={<><path d="M5 12h14"/><path d="M12 5v14"/></>} />;
+const X = (p) => <Icon {...p} d={<><path d="M18 6 6 18"/><path d="m6 6 12 12"/></>} />;
+const Calendar = (p) => <Icon {...p} d={<><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></>} />;
+const Flag = (p) => <Icon {...p} d={<><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></>} />;
+const Trash2 = (p) => <Icon {...p} d={<><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></>} />;
+const Edit2 = (p) => <Icon {...p} d={<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>} />;
+const Check = (p) => <Icon {...p} d={<path d="M20 6 9 17l-5-5"/>} />;
+const FolderPlus = (p) => <Icon {...p} d={<><path d="M12 10v6"/><path d="M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></>} />;
+const ChevronDown = (p) => <Icon {...p} d={<path d="m6 9 6 6 6-6"/>} />;
+const ChevronRight = (p) => <Icon {...p} d={<path d="m9 18 6-6-6-6"/>} />;
+const ChevronLeft = (p) => <Icon {...p} d={<path d="m15 18-6-6 6-6"/>} />;
+const Tag = (p) => <Icon {...p} d={<><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></>} />;
+const Copy = (p) => <Icon {...p} d={<><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></>} />;
+const Search = (p) => <Icon {...p} d={<><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>} />;
+const Filter = (p) => <Icon {...p} d={<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>} />;
+const Download = (p) => <Icon {...p} d={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></>} />;
+const Upload = (p) => <Icon {...p} d={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></>} />;
+const LayoutGrid = (p) => <Icon {...p} d={<><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></>} />;
+const List = (p) => <Icon {...p} d={<><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></>} />;
+const Circle = (p) => <Icon {...p} d={<circle cx="12" cy="12" r="10"/>} />;
+const CheckCircle2 = (p) => <Icon {...p} d={<><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></>} />;
+const Users = (p) => <Icon {...p} d={<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>} />;
+const Repeat = (p) => <Icon {...p} d={<><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></>} />;
+const CalendarDays = (p) => <Icon {...p} d={<><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></>} />;
+const FileSpreadsheet = (p) => <Icon {...p} d={<><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></>} />;
+const FileText = (p) => <Icon {...p} d={<><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></>} />;
+const BarChart3 = (p) => <Icon {...p} d={<><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></>} />;
+const Target = (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>} />;
+const Bell = (p) => <Icon {...p} d={<><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></>} />;
+const Folder = (p) => <Icon {...p} d={<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>} />;
+const FolderOpen = (p) => <Icon {...p} d={<path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>} />;
+const Archive = (p) => <Icon {...p} d={<><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></>} />;
+const TrendingUp = (p) => <Icon {...p} d={<><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></>} />;
+const Clock = (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />;
+const Zap = (p) => <Icon {...p} d={<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>} />;
+const Sun = (p) => <Icon {...p} d={<><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></>} />;
+const Moon = (p) => <Icon {...p} d={<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>} />;
+const Monitor = (p) => <Icon {...p} d={<><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></>} />;
+const Sparkles = (p) => <Icon {...p} d={<><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></>} />;
+const Settings = (p) => <Icon {...p} d={<><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></>} />;
+const Webhook = (p) => <Icon {...p} d={<><path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2"/><path d="m6 17 3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06"/><path d="m12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8"/></>} />;
+const History = (p) => <Icon {...p} d={<><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></>} />;
+const Keyboard = (p) => <Icon {...p} d={<><path d="M10 8h.01"/><path d="M12 12h.01"/><path d="M14 8h.01"/><path d="M16 12h.01"/><path d="M18 8h.01"/><path d="M6 8h.01"/><path d="M7 16h10"/><path d="M8 12h.01"/><rect width="20" height="16" x="2" y="4" rx="2"/></>} />;
 
-URI: index.html.fr.utf8
-Content-Language: fr
-Content-type: text/html; charset=UTF-8
+const defaultNewTask = { title: '', description: '', priority: 'medium', dueDate: '', startDate: '', tags: [], assignee: '', subtasks: [], recurrence: 'none', estimatedHours: '' };
 
-URI: index.html.ko.euc-kr
-Content-Language: ko
-Content-type: text/html; charset=EUC-KR
+// ============ Configuration Supabase ============
+const SUPABASE_URL = 'https://rjguuligysyyiymrrhsd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_OHWzMheBmFjNaJ9rUHq0vw_p4nYNID8';
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-URI: index.html.tr.utf8
-Content-Language: tr
-Content-type: text/html; charset=UTF-8
+// ============ Storage API (Supabase avec fallback localStorage) ============
+const storage = {
+  _online: false,
+  _checkOnline: async () => {
+    if (!supabaseClient) return false;
+    try {
+      const { error } = await supabaseClient.from('projects').select('id').limit(1);
+      storage._online = !error;
+      return storage._online;
+    } catch (e) {
+      storage._online = false;
+      return false;
+    }
+  },
+  set: async (key, value) => {
+    // Toujours backup local
+    localStorage.setItem(key, value);
+    if (!supabaseClient || !storage._online) return { key, value };
+    try {
+      if (key.startsWith('project:')) {
+        const id = key.replace('project:', '');
+        const data = JSON.parse(value);
+        await supabaseClient.from('projects').upsert({ id, name: data.name, data, updated_at: new Date().toISOString() });
+      } else if (key.startsWith('settings:')) {
+        const id = key.replace('settings:', '');
+        await supabaseClient.from('settings').upsert({ id, data: JSON.parse(value), updated_at: new Date().toISOString() });
+      }
+    } catch (e) { console.warn('Supabase set failed, using localStorage fallback', e); }
+    return { key, value };
+  },
+  get: async (key) => {
+    if (supabaseClient && storage._online) {
+      try {
+        if (key.startsWith('project:')) {
+          const id = key.replace('project:', '');
+          const { data } = await supabaseClient.from('projects').select('data').eq('id', id).single();
+          if (data) { localStorage.setItem(key, JSON.stringify(data.data)); return { key, value: JSON.stringify(data.data) }; }
+        } else if (key.startsWith('settings:')) {
+          const id = key.replace('settings:', '');
+          const { data } = await supabaseClient.from('settings').select('data').eq('id', id).single();
+          if (data) { localStorage.setItem(key, JSON.stringify(data.data)); return { key, value: JSON.stringify(data.data) }; }
+        }
+      } catch (e) {}
+    }
+    // Fallback localStorage
+    const value = localStorage.getItem(key);
+    if (value === null) return null;
+    return { key, value };
+  },
+  delete: async (key) => {
+    localStorage.removeItem(key);
+    if (supabaseClient && storage._online) {
+      try {
+        if (key.startsWith('project:')) {
+          const id = key.replace('project:', '');
+          await supabaseClient.from('projects').delete().eq('id', id);
+        }
+      } catch (e) {}
+    }
+    return { key, deleted: true };
+  },
+  list: async (prefix = '') => {
+    if (supabaseClient && storage._online && prefix.startsWith('project:')) {
+      try {
+        const { data } = await supabaseClient.from('projects').select('id, data');
+        if (data && data.length > 0) {
+          // Sync local
+          data.forEach(row => localStorage.setItem(`project:${row.id}`, JSON.stringify(row.data)));
+          return { keys: data.map(row => `project:${row.id}`), prefix };
+        }
+      } catch (e) {}
+    }
+    // Fallback localStorage
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(prefix)) keys.push(k);
+    }
+    return { keys, prefix };
+  }
+};
 
-URI: index.html.zh-cn.utf8
-Content-Language: zh-cn
-Content-type: text/html; charset=UTF-8
+function ProjectManager() {
+  const [projects, setProjects] = useState([]);
+  const [activeProjectId, setActiveProjectId] = useState(null);
+  const [showProjectDropdown, setShowProjectDropdown] = useState(false);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [newProjectParent, setNewProjectParent] = useState(null);
+  const [showNewProject, setShowNewProject] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [showArchived, setShowArchived] = useState(false);
+
+  const [showNewTask, setShowNewTask] = useState(null);
+  const [newTask, setNewTask] = useState(defaultNewTask);
+  const [editingTask, setEditingTask] = useState(null);
+  const [expandedTask, setExpandedTask] = useState(null);
+  const [draggedTask, setDraggedTask] = useState(null);
+  const [dragOverColumn, setDragOverColumn] = useState(null);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterPriority, setFilterPriority] = useState('all');
+  const [filterTag, setFilterTag] = useState('all');
+  const [filterAssignee, setFilterAssignee] = useState('all');
+  const [viewMode, setViewMode] = useState('kanban');
+  const [showFilters, setShowFilters] = useState(false);
+
+  const [calendarDate, setCalendarDate] = useState(new Date());
+  const [selectedCalendarDate, setSelectedCalendarDate] = useState(null);
+
+  const [showTeamModal, setShowTeamModal] = useState(false);
+  const [newMemberName, setNewMemberName] = useState('');
+
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showActivity, setShowActivity] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [syncStatus, setSyncStatus] = useState('connecting'); // 'connecting' | 'online' | 'offline'
+
+  const [settings, setSettings] = useState({
+    theme: 'system',
+    notificationsEnabled: true,
+    webhookUrl: '',
+    webhookEvents: { taskCreated: true, taskCompleted: true, taskOverdue: false }
+  });
+  const searchInputRef = useRef(null);
+
+  const columns = [
+    { id: 'todo', title: 'À faire', color: 'bg-slate-100 dark:bg-slate-800', accent: 'border-slate-400', dot: 'bg-slate-400', gantt: '#94a3b8' },
+    { id: 'doing', title: 'En cours', color: 'bg-blue-50 dark:bg-blue-900/20', accent: 'border-blue-400', dot: 'bg-blue-400', gantt: '#60a5fa' },
+    { id: 'review', title: 'À valider', color: 'bg-amber-50 dark:bg-amber-900/20', accent: 'border-amber-400', dot: 'bg-amber-400', gantt: '#fbbf24' },
+    { id: 'done', title: 'Terminé', color: 'bg-green-50 dark:bg-green-900/20', accent: 'border-green-400', dot: 'bg-green-400', gantt: '#4ade80' }
+  ];
+
+  const priorities = {
+    low: { label: 'Basse', color: 'text-slate-500', bg: 'bg-slate-100 dark:bg-slate-700', order: 1 },
+    medium: { label: 'Moyenne', color: 'text-blue-600', bg: 'bg-blue-100 dark:bg-blue-900/40', order: 2 },
+    high: { label: 'Haute', color: 'text-orange-600', bg: 'bg-orange-100 dark:bg-orange-900/40', order: 3 },
+    urgent: { label: 'Urgente', color: 'text-red-600', bg: 'bg-red-100 dark:bg-red-900/40', order: 4 }
+  };
+
+  const recurrenceOptions = {
+    none: 'Pas de récurrence',
+    daily: 'Quotidien',
+    weekly: 'Hebdomadaire',
+    biweekly: 'Toutes les 2 semaines',
+    monthly: 'Mensuel',
+    quarterly: 'Trimestriel',
+    yearly: 'Annuel'
+  };
+
+  const tagColors = [
+    { bg: 'bg-purple-100 dark:bg-purple-900/40', text: 'text-purple-700 dark:text-purple-300' },
+    { bg: 'bg-pink-100 dark:bg-pink-900/40', text: 'text-pink-700 dark:text-pink-300' },
+    { bg: 'bg-indigo-100 dark:bg-indigo-900/40', text: 'text-indigo-700 dark:text-indigo-300' },
+    { bg: 'bg-teal-100 dark:bg-teal-900/40', text: 'text-teal-700 dark:text-teal-300' },
+    { bg: 'bg-cyan-100 dark:bg-cyan-900/40', text: 'text-cyan-700 dark:text-cyan-300' },
+    { bg: 'bg-rose-100 dark:bg-rose-900/40', text: 'text-rose-700 dark:text-rose-300' }
+  ];
+
+  const getTagColor = (tag) => {
+    let hash = 0;
+    for (let i = 0; i < tag.length; i++) hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+    return tagColors[Math.abs(hash) % tagColors.length];
+  };
+
+  const getAvatarColor = (name) => {
+    const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-orange-500', 'bg-teal-500', 'bg-indigo-500', 'bg-rose-500'];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    return colors[Math.abs(hash) % colors.length];
+  };
+
+  const getInitials = (name) => name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+  const templates = [
+    { id: 'enedis-plan-com', name: 'Plan de communication', icon: '📢', description: 'Structure un plan de com avec phases et jalons', category: 'Travail',
+      tasks: [
+        { title: 'Définir les objectifs de communication', priority: 'high', status: 'todo', tags: ['strategie'] },
+        { title: 'Identifier les cibles et canaux', priority: 'high', status: 'todo', tags: ['strategie'] },
+        { title: 'Rédiger les messages clés', priority: 'medium', status: 'todo', tags: ['contenu'] },
+        { title: 'Créer le calendrier éditorial', priority: 'medium', status: 'todo', tags: ['planning'] },
+        { title: 'Préparer les visuels et supports', priority: 'medium', status: 'todo', tags: ['contenu'] },
+        { title: 'Valider avec la direction', priority: 'high', status: 'todo', tags: ['validation'] },
+        { title: 'Déployer la communication', priority: 'urgent', status: 'todo', tags: ['execution'] },
+        { title: 'Mesurer les résultats et ajuster', priority: 'medium', status: 'todo', tags: ['analyse'] }
+      ] },
+    { id: 'seminaire', name: 'Organisation de séminaire', icon: '🎯', description: 'Toutes les étapes pour organiser un séminaire pro', category: 'Travail',
+      tasks: [
+        { title: 'Définir les objectifs et le thème', priority: 'high', status: 'todo', tags: ['preparation'] },
+        { title: "Budgétiser l'événement", priority: 'high', status: 'todo', tags: ['budget'] },
+        { title: 'Choisir et réserver le lieu', priority: 'urgent', status: 'todo', tags: ['logistique'] },
+        { title: 'Établir la liste des participants', priority: 'high', status: 'todo', tags: ['preparation'] },
+        { title: 'Construire le programme détaillé', priority: 'high', status: 'todo', tags: ['programme'] },
+        { title: 'Envoyer les invitations', priority: 'medium', status: 'todo', tags: ['communication'] },
+        { title: 'Gérer la logistique', priority: 'medium', status: 'todo', tags: ['logistique'] },
+        { title: 'Préparer les supports et présentations', priority: 'medium', status: 'todo', tags: ['contenu'] },
+        { title: 'Animer et faciliter le séminaire', priority: 'urgent', status: 'todo', tags: ['jour-j'] },
+        { title: 'Envoyer le compte-rendu', priority: 'medium', status: 'todo', tags: ['suivi'] }
+      ] },
+    { id: 'sprint-agile', name: 'Sprint Agile (2 semaines)', icon: '⚡', description: 'Cycle de développement itératif classique', category: 'Projet',
+      tasks: [
+        { title: 'Backlog refinement', priority: 'high', status: 'done', tags: ['planning'] },
+        { title: 'Sprint planning', priority: 'high', status: 'done', tags: ['planning'] },
+        { title: 'Daily stand-ups', priority: 'medium', status: 'doing', tags: ['ceremonie'], recurrence: 'daily' },
+        { title: 'Développement des user stories', priority: 'high', status: 'doing', tags: ['dev'] },
+        { title: 'Tests QA', priority: 'high', status: 'todo', tags: ['qa'] },
+        { title: 'Sprint review (démo)', priority: 'high', status: 'todo', tags: ['ceremonie'] },
+        { title: 'Sprint retrospective', priority: 'medium', status: 'todo', tags: ['amelioration'] }
+      ] },
+    { id: 'lancement-produit', name: 'Lancement de produit', icon: '🚀', description: 'Checklist go-to-market complète', category: 'Marketing',
+      tasks: [
+        { title: 'Finaliser le positionnement produit', priority: 'urgent', status: 'todo', tags: ['strategie'] },
+        { title: 'Définir le pricing', priority: 'urgent', status: 'todo', tags: ['pricing'] },
+        { title: 'Créer le site de lancement', priority: 'high', status: 'todo', tags: ['marketing'] },
+        { title: 'Préparer le kit presse', priority: 'high', status: 'todo', tags: ['pr'] },
+        { title: 'Planifier les campagnes paid', priority: 'medium', status: 'todo', tags: ['acquisition'] },
+        { title: "Former l'équipe commerciale", priority: 'high', status: 'todo', tags: ['sales'] },
+        { title: 'Préparer le support client', priority: 'medium', status: 'todo', tags: ['support'] },
+        { title: 'Jour J : Launch 🎉', priority: 'urgent', status: 'todo', tags: ['launch'] },
+        { title: 'Analyser les premières metrics', priority: 'high', status: 'todo', tags: ['analyse'] }
+      ] },
+    { id: 'voyage', name: "Organisation d'un voyage", icon: '✈️', description: 'Pense à tout pour ton prochain voyage', category: 'Perso',
+      tasks: [
+        { title: 'Choisir la destination et les dates', priority: 'high', status: 'todo', tags: ['planning'] },
+        { title: 'Réserver les vols', priority: 'urgent', status: 'todo', tags: ['transport'] },
+        { title: "Réserver l'hébergement", priority: 'urgent', status: 'todo', tags: ['logement'] },
+        { title: 'Vérifier les documents (passeport, visa)', priority: 'high', status: 'todo', tags: ['admin'] },
+        { title: 'Souscrire une assurance voyage', priority: 'medium', status: 'todo', tags: ['admin'] },
+        { title: 'Planifier les activités et visites', priority: 'medium', status: 'todo', tags: ['activites'] },
+        { title: 'Faire la valise', priority: 'medium', status: 'todo', tags: ['prep'] },
+        { title: 'Échanger des devises', priority: 'low', status: 'todo', tags: ['finance'] }
+      ] },
+    { id: 'suivi-portefeuille', name: "Suivi d'investissement mensuel", icon: '📊', description: 'Routine mensuelle de gestion financière', category: 'Finance',
+      tasks: [
+        { title: 'Exporter les relevés bancaires', priority: 'medium', status: 'todo', tags: ['data'], recurrence: 'monthly' },
+        { title: 'Analyser la performance du portefeuille', priority: 'high', status: 'todo', tags: ['analyse'], recurrence: 'monthly' },
+        { title: 'Vérifier les signaux techniques', priority: 'medium', status: 'todo', tags: ['analyse'], recurrence: 'monthly' },
+        { title: 'Rebalancer les allocations si nécessaire', priority: 'medium', status: 'todo', tags: ['decision'], recurrence: 'monthly' },
+        { title: "Effectuer l'investissement du mois", priority: 'high', status: 'todo', tags: ['action'], recurrence: 'monthly' },
+        { title: 'Mettre à jour le tracker personnel', priority: 'low', status: 'todo', tags: ['suivi'], recurrence: 'monthly' }
+      ] },
+    { id: 'etudes', name: "Projet d'études / mémoire", icon: '🎓', description: 'Structure ton mémoire ou projet scolaire', category: 'Études',
+      tasks: [
+        { title: 'Choisir le sujet et la problématique', priority: 'urgent', status: 'todo', tags: ['cadrage'] },
+        { title: 'Revue de littérature', priority: 'high', status: 'todo', tags: ['recherche'] },
+        { title: 'Rédiger le plan détaillé', priority: 'high', status: 'todo', tags: ['redaction'] },
+        { title: 'Collecte de données / entretiens', priority: 'high', status: 'todo', tags: ['terrain'] },
+        { title: 'Analyse et traitement des données', priority: 'high', status: 'todo', tags: ['analyse'] },
+        { title: 'Rédaction des chapitres', priority: 'high', status: 'todo', tags: ['redaction'] },
+        { title: 'Relecture et corrections', priority: 'medium', status: 'todo', tags: ['finition'] },
+        { title: 'Préparation de la soutenance', priority: 'urgent', status: 'todo', tags: ['soutenance'] },
+        { title: 'Soutenance', priority: 'urgent', status: 'todo', tags: ['soutenance'] }
+      ] },
+    { id: 'demenagement', name: 'Déménagement', icon: '📦', description: 'Pour ne rien oublier lors d\'un déménagement', category: 'Perso',
+      tasks: [
+        { title: 'Donner le préavis au propriétaire', priority: 'urgent', status: 'todo', tags: ['admin'] },
+        { title: 'Réserver un camion ou des déménageurs', priority: 'high', status: 'todo', tags: ['logistique'] },
+        { title: 'Faire les cartons et étiqueter', priority: 'high', status: 'todo', tags: ['pack'] },
+        { title: 'Transférer les abonnements', priority: 'high', status: 'todo', tags: ['admin'] },
+        { title: "Changer l'adresse (impôts, CAF, banque)", priority: 'high', status: 'todo', tags: ['admin'] },
+        { title: 'État des lieux de sortie', priority: 'urgent', status: 'todo', tags: ['admin'] },
+        { title: 'Jour J : déménagement', priority: 'urgent', status: 'todo', tags: ['jour-j'] },
+        { title: "État des lieux d'entrée", priority: 'urgent', status: 'todo', tags: ['admin'] }
+      ] }
+  ];
+
+  // Theme
+  useEffect(() => {
+    const applyTheme = () => {
+      const theme = settings.theme;
+      const root = document.documentElement;
+      if (theme === 'dark') root.classList.add('dark');
+      else if (theme === 'light') root.classList.remove('dark');
+      else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) root.classList.add('dark'); else root.classList.remove('dark');
+      }
+    };
+    applyTheme();
+    if (settings.theme === 'system') {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      mq.addEventListener('change', applyTheme);
+      return () => mq.removeEventListener('change', applyTheme);
+    }
+  }, [settings.theme]);
+
+  useEffect(() => {
+    const loadAll = async () => {
+      try {
+        // Vérifier connexion Supabase
+        const online = await storage._checkOnline();
+        setSyncStatus(online ? 'online' : 'offline');
+
+        try {
+          const s = await storage.get('settings:main');
+          if (s) setSettings(prev => ({ ...prev, ...JSON.parse(s.value) }));
+        } catch (e) {}
+        const result = await storage.list('project:');
+        if (result && result.keys && result.keys.length > 0) {
+          const loaded = [];
+          for (const key of result.keys) {
+            try {
+              const data = await storage.get(key);
+              if (data) {
+                const p = JSON.parse(data.value);
+                p.tasks = p.tasks.map(t => ({ tags: [], assignee: '', subtasks: [], recurrence: 'none', startDate: '', estimatedHours: '', ...t }));
+                p.team = p.team || [];
+                p.parentId = p.parentId || null;
+                p.archived = p.archived || false;
+                p.activity = p.activity || [];
+                loaded.push(p);
+              }
+            } catch (e) {}
+          }
+          if (loaded.length > 0) {
+            setProjects(loaded);
+            const firstNonArchived = loaded.find(p => !p.archived) || loaded[0];
+            setActiveProjectId(firstNonArchived.id);
+          } else createDefaultProject();
+        } else createDefaultProject();
+
+        // Souscription temps réel aux changements
+        if (supabaseClient && online) {
+          const channel = supabaseClient
+            .channel('projects-changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, async (payload) => {
+              if (payload.eventType === 'DELETE') {
+                setProjects(prev => prev.filter(p => p.id !== payload.old.id));
+              } else {
+                const newProject = payload.new.data;
+                newProject.tasks = newProject.tasks.map(t => ({ tags: [], assignee: '', subtasks: [], recurrence: 'none', startDate: '', estimatedHours: '', ...t }));
+                newProject.team = newProject.team || [];
+                newProject.parentId = newProject.parentId || null;
+                newProject.archived = newProject.archived || false;
+                newProject.activity = newProject.activity || [];
+                setProjects(prev => {
+                  const exists = prev.find(p => p.id === newProject.id);
+                  if (exists) return prev.map(p => p.id === newProject.id ? newProject : p);
+                  return [...prev, newProject];
+                });
+              }
+            })
+            .subscribe();
+          return () => { supabaseClient.removeChannel(channel); };
+        }
+      } catch (e) { createDefaultProject(); }
+      finally { setLoading(false); }
+    };
+    loadAll();
+  }, []);
+
+  const saveSettings = async (next) => {
+    setSettings(next);
+    try { await storage.set('settings:main', JSON.stringify(next)); } catch (e) {}
+  };
+
+  const createDefaultProject = () => {
+    const p = { id: `proj_${Date.now()}`, name: 'Mon premier projet', createdAt: new Date().toISOString(), tasks: [], team: [], parentId: null, archived: false, activity: [] };
+    setProjects([p]);
+    setActiveProjectId(p.id);
+    saveProject(p);
+  };
+
+  const saveProject = async (project) => {
+    try { await storage.set(`project:${project.id}`, JSON.stringify(project)); } catch (e) {}
+  };
+
+  const activeProject = projects.find(p => p.id === activeProjectId);
+
+  const triggerWebhook = async (event, data) => {
+    if (!settings.webhookUrl || !settings.webhookEvents[event]) return;
+    try {
+      await fetch(settings.webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event, timestamp: new Date().toISOString(), project: activeProject?.name, data }),
+        mode: 'no-cors'
+      });
+    } catch (e) {}
+  };
+
+  const updateActiveProject = (updater) => {
+    setProjects(prev => prev.map(p => {
+      if (p.id === activeProjectId) {
+        const np = updater(p);
+        saveProject(np);
+        return np;
+      }
+      return p;
+    }));
+  };
+
+  const addProject = () => {
+    if (!newProjectName.trim()) return;
+    const p = { id: `proj_${Date.now()}`, name: newProjectName.trim(), createdAt: new Date().toISOString(), tasks: [], team: [], parentId: newProjectParent, archived: false, activity: [] };
+    setProjects(prev => [...prev, p]);
+    setActiveProjectId(p.id);
+    saveProject(p);
+    setNewProjectName('');
+    setNewProjectParent(null);
+    setShowNewProject(false);
+    setShowProjectDropdown(false);
+  };
+
+  const createFromTemplate = (template) => {
+    const now = Date.now();
+    const p = {
+      id: `proj_${now}`,
+      name: template.name,
+      createdAt: new Date().toISOString(),
+      tasks: template.tasks.map((t, idx) => ({
+        id: `task_${now}_${idx}`,
+        ...t,
+        description: t.description || '',
+        tags: t.tags || [],
+        subtasks: [],
+        assignee: '',
+        recurrence: t.recurrence || 'none',
+        dueDate: '',
+        startDate: '',
+        estimatedHours: '',
+        createdAt: new Date().toISOString()
+      })),
+      team: [], parentId: null, archived: false,
+      activity: [{ id: `act_${now}`, action: 'Projet créé', detail: `Depuis le template "${template.name}"`, timestamp: new Date().toISOString() }]
+    };
+    setProjects(prev => [...prev, p]);
+    setActiveProjectId(p.id);
+    saveProject(p);
+    setShowTemplates(false);
+    setShowProjectDropdown(false);
+  };
+
+  const deleteProject = async (projectId) => {
+    const nonArchivedCount = projects.filter(p => !p.archived).length;
+    if (nonArchivedCount <= 1 && !projects.find(p => p.id === projectId)?.archived) {
+      alert('Tu dois garder au moins un projet actif.');
+      return;
+    }
+    const subProjects = projects.filter(p => p.parentId === projectId);
+    const msg = subProjects.length > 0 ? `Supprimer ce projet et ses ${subProjects.length} sous-projet(s) ?` : 'Supprimer ce projet et toutes ses tâches ?';
+    if (!confirm(msg)) return;
+    const idsToDelete = [projectId, ...subProjects.map(p => p.id)];
+    for (const id of idsToDelete) { try { await storage.delete(`project:${id}`); } catch (e) {} }
+    setProjects(prev => {
+      const filtered = prev.filter(p => !idsToDelete.includes(p.id));
+      if (idsToDelete.includes(activeProjectId) && filtered.length > 0) {
+        const next = filtered.find(p => !p.archived) || filtered[0];
+        setActiveProjectId(next.id);
+      }
+      return filtered;
+    });
+  };
+
+  const toggleArchiveProject = (projectId) => {
+    setProjects(prev => prev.map(p => {
+      if (p.id === projectId) { const np = { ...p, archived: !p.archived }; saveProject(np); return np; }
+      return p;
+    }));
+  };
+
+  const addTeamMember = () => {
+    if (!newMemberName.trim()) return;
+    updateActiveProject(p => ({ ...p, team: [...(p.team || []), newMemberName.trim()] }));
+    setNewMemberName('');
+  };
+
+  const removeTeamMember = (name) => {
+    updateActiveProject(p => ({ ...p, team: (p.team || []).filter(m => m !== name), tasks: p.tasks.map(t => t.assignee === name ? { ...t, assignee: '' } : t) }));
+  };
+
+  const computeNextDate = (dateStr, recurrence) => {
+    if (!dateStr || recurrence === 'none') return null;
+    const d = new Date(dateStr);
+    switch (recurrence) {
+      case 'daily': d.setDate(d.getDate() + 1); break;
+      case 'weekly': d.setDate(d.getDate() + 7); break;
+      case 'biweekly': d.setDate(d.getDate() + 14); break;
+      case 'monthly': d.setMonth(d.getMonth() + 1); break;
+      case 'quarterly': d.setMonth(d.getMonth() + 3); break;
+      case 'yearly': d.setFullYear(d.getFullYear() + 1); break;
+    }
+    return d.toISOString().split('T')[0];
+  };
+
+  const addTask = (columnId) => {
+    if (!newTask.title.trim()) return;
+    const task = { id: `task_${Date.now()}`, ...newTask, title: newTask.title.trim(), status: columnId, createdAt: new Date().toISOString() };
+    updateActiveProject(p => ({
+      ...p, tasks: [...p.tasks, task],
+      activity: [{ id: `act_${Date.now()}`, action: 'Tâche créée', detail: task.title, timestamp: new Date().toISOString() }, ...(p.activity || [])].slice(0, 100)
+    }));
+    triggerWebhook('taskCreated', { task });
+    setNewTask(defaultNewTask);
+    setShowNewTask(null);
+  };
+
+  const deleteTask = (taskId) => {
+    const task = activeProject?.tasks.find(t => t.id === taskId);
+    updateActiveProject(p => ({
+      ...p, tasks: p.tasks.filter(t => t.id !== taskId),
+      activity: task ? [{ id: `act_${Date.now()}`, action: 'Tâche supprimée', detail: task.title, timestamp: new Date().toISOString() }, ...(p.activity || [])].slice(0, 100) : p.activity
+    }));
+  };
+
+  const duplicateTask = (task) => {
+    const copy = { ...task, id: `task_${Date.now()}`, title: `${task.title} (copie)`, createdAt: new Date().toISOString(), subtasks: (task.subtasks || []).map(s => ({ ...s, id: `st_${Date.now()}_${Math.random()}`, done: false })) };
+    updateActiveProject(p => ({ ...p, tasks: [...p.tasks, copy] }));
+  };
+
+  const updateTask = (taskId, updates) => {
+    updateActiveProject(p => ({ ...p, tasks: p.tasks.map(t => t.id === taskId ? { ...t, ...updates } : t) }));
+  };
+
+  const moveTask = (taskId, newStatus) => {
+    const task = activeProject?.tasks.find(t => t.id === taskId);
+    if (!task) return;
+    if (newStatus === 'done' && task.status !== 'done' && task.recurrence && task.recurrence !== 'none' && task.dueDate) {
+      const nextDate = computeNextDate(task.dueDate, task.recurrence);
+      const nextStart = task.startDate ? computeNextDate(task.startDate, task.recurrence) : '';
+      const nextTask = { ...task, id: `task_${Date.now()}`, status: 'todo', dueDate: nextDate, startDate: nextStart, subtasks: (task.subtasks || []).map(s => ({ ...s, id: `st_${Date.now()}_${Math.random()}`, done: false })), createdAt: new Date().toISOString() };
+      updateActiveProject(p => ({
+        ...p, tasks: [...p.tasks.map(t => t.id === taskId ? { ...t, status: 'done' } : t), nextTask],
+        activity: [{ id: `act_${Date.now()}`, action: 'Tâche terminée', detail: `${task.title} → occurrence suivante créée`, timestamp: new Date().toISOString() }, ...(p.activity || [])].slice(0, 100)
+      }));
+      triggerWebhook('taskCompleted', { task });
+    } else {
+      const statusLabel = columns.find(c => c.id === newStatus)?.title || newStatus;
+      updateActiveProject(p => ({
+        ...p, tasks: p.tasks.map(t => t.id === taskId ? { ...t, status: newStatus } : t),
+        activity: [{ id: `act_${Date.now()}`, action: newStatus === 'done' ? 'Tâche terminée' : 'Statut modifié', detail: `${task.title} → ${statusLabel}`, timestamp: new Date().toISOString() }, ...(p.activity || [])].slice(0, 100)
+      }));
+      if (newStatus === 'done') triggerWebhook('taskCompleted', { task });
+    }
+  };
+
+  const addSubtask = (taskId, title) => {
+    if (!title.trim()) return;
+    updateActiveProject(p => ({ ...p, tasks: p.tasks.map(t => t.id === taskId ? { ...t, subtasks: [...(t.subtasks || []), { id: `st_${Date.now()}`, title: title.trim(), done: false }] } : t) }));
+  };
+
+  const toggleSubtask = (taskId, subtaskId) => {
+    updateActiveProject(p => ({ ...p, tasks: p.tasks.map(t => t.id === taskId ? { ...t, subtasks: t.subtasks.map(s => s.id === subtaskId ? { ...s, done: !s.done } : s) } : t) }));
+  };
+
+  const deleteSubtask = (taskId, subtaskId) => {
+    updateActiveProject(p => ({ ...p, tasks: p.tasks.map(t => t.id === taskId ? { ...t, subtasks: t.subtasks.filter(s => s.id !== subtaskId) } : t) }));
+  };
+
+  const addTag = (taskId, tag) => {
+    const clean = tag.trim().toLowerCase();
+    if (!clean) return;
+    updateActiveProject(p => ({ ...p, tasks: p.tasks.map(t => t.id === taskId ? { ...t, tags: [...new Set([...(t.tags || []), clean])] } : t) }));
+  };
+
+  const removeTag = (taskId, tag) => {
+    updateActiveProject(p => ({ ...p, tasks: p.tasks.map(t => t.id === taskId ? { ...t, tags: (t.tags || []).filter(x => x !== tag) } : t) }));
+  };
+
+  const handleDragStart = (e, task) => { setDraggedTask(task); e.dataTransfer.effectAllowed = 'move'; };
+  const handleDragOver = (e, columnId) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; setDragOverColumn(columnId); };
+  const handleDragLeave = () => setDragOverColumn(null);
+  const handleDrop = (e, columnId) => {
+    e.preventDefault();
+    if (draggedTask && draggedTask.status !== columnId) moveTask(draggedTask.id, columnId);
+    setDraggedTask(null);
+    setDragOverColumn(null);
+  };
+
+  const getFilteredTasks = () => {
+    if (!activeProject) return [];
+    return activeProject.tasks.filter(t => {
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        const ok = t.title.toLowerCase().includes(q) || (t.description || '').toLowerCase().includes(q) || (t.tags || []).some(tag => tag.includes(q)) || (t.assignee || '').toLowerCase().includes(q);
+        if (!ok) return false;
+      }
+      if (filterPriority !== 'all' && t.priority !== filterPriority) return false;
+      if (filterTag !== 'all' && !(t.tags || []).includes(filterTag)) return false;
+      if (filterAssignee !== 'all') {
+        if (filterAssignee === 'unassigned' && t.assignee) return false;
+        if (filterAssignee !== 'unassigned' && t.assignee !== filterAssignee) return false;
+      }
+      return true;
+    });
+  };
+
+  const getTasksByStatus = (status) => getFilteredTasks().filter(t => t.status === status);
+
+  const getAllTags = () => {
+    if (!activeProject) return [];
+    const tags = new Set();
+    activeProject.tasks.forEach(t => (t.tags || []).forEach(tag => tags.add(tag)));
+    return [...tags].sort();
+  };
+
+  const isOverdue = (dueDate) => {
+    if (!dueDate) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return new Date(dueDate) < today;
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+  };
+
+  const getStats = () => {
+    if (!activeProject) return { total: 0, done: 0, progress: 0, overdue: 0, dueToday: 0 };
+    const total = activeProject.tasks.length;
+    const done = activeProject.tasks.filter(t => t.status === 'done').length;
+    const overdue = activeProject.tasks.filter(t => isOverdue(t.dueDate) && t.status !== 'done').length;
+    const today = new Date().toISOString().split('T')[0];
+    const dueToday = activeProject.tasks.filter(t => t.dueDate === today && t.status !== 'done').length;
+    const progress = total > 0 ? Math.round((done / total) * 100) : 0;
+    return { total, done, progress, overdue, dueToday };
+  };
+
+  const notifications = useMemo(() => {
+    if (!activeProject || !settings.notificationsEnabled) return [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split('T')[0];
+    const in3days = new Date(today);
+    in3days.setDate(in3days.getDate() + 3);
+    const items = [];
+    activeProject.tasks.forEach(t => {
+      if (t.status === 'done' || !t.dueDate) return;
+      const due = new Date(t.dueDate);
+      if (due < today) {
+        const daysLate = Math.floor((today - due) / (1000 * 60 * 60 * 24));
+        items.push({ type: 'overdue', task: t, severity: 3, message: `En retard de ${daysLate} jour${daysLate > 1 ? 's' : ''}` });
+      } else if (t.dueDate === todayStr) items.push({ type: 'today', task: t, severity: 2, message: "À faire aujourd'hui" });
+      else if (due <= in3days) { const daysUntil = Math.floor((due - today) / (1000 * 60 * 60 * 24)); items.push({ type: 'soon', task: t, severity: 1, message: `Dans ${daysUntil} jour${daysUntil > 1 ? 's' : ''}` }); }
+      if (t.priority === 'urgent' && t.status !== 'done') items.push({ type: 'urgent', task: t, severity: 2, message: 'Priorité urgente' });
+    });
+    return items.sort((a, b) => b.severity - a.severity);
+  }, [activeProject, settings.notificationsEnabled]);
+
+  const requestNotificationPermission = async () => {
+    if (typeof Notification === 'undefined') { alert('Ton navigateur ne supporte pas les notifications.'); return; }
+    const result = await Notification.requestPermission();
+    if (result === 'granted') new Notification('Notifications activées ✅', { body: 'Tu recevras une alerte pour chaque tâche en retard.' });
+  };
+
+  const escapeHtml = (str) => {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  };
+
+  const exportToPDF = () => {
+    if (!activeProject) return;
+    const stats = getStats();
+    const today = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${escapeHtml(activeProject.name)}</title><style>
+      @page { size: A4; margin: 2cm; }
+      body { font-family: -apple-system, sans-serif; color: #1e293b; margin: 0; line-height: 1.5; }
+      .header { border-bottom: 3px solid #3b82f6; padding-bottom: 16px; margin-bottom: 24px; }
+      h1 { margin: 0 0 8px 0; font-size: 28px; color: #0f172a; }
+      .meta { color: #64748b; font-size: 13px; }
+      .stats { display: flex; gap: 24px; margin: 24px 0; padding: 16px; background: #f8fafc; border-radius: 8px; }
+      .stat { flex: 1; }
+      .stat-value { font-size: 24px; font-weight: 600; color: #0f172a; }
+      .stat-label { font-size: 12px; color: #64748b; text-transform: uppercase; margin-top: 4px; }
+      h2 { font-size: 18px; margin: 24px 0 12px 0; padding: 8px 12px; border-radius: 6px; }
+      h2.todo { background: #f1f5f9; color: #475569; }
+      h2.doing { background: #dbeafe; color: #1e40af; }
+      h2.review { background: #fef3c7; color: #92400e; }
+      h2.done { background: #dcfce7; color: #166534; }
+      .task { border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; page-break-inside: avoid; }
+      .task-title { font-weight: 600; font-size: 14px; }
+      .badge { padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; display: inline-block; margin: 2px; }
+      .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; text-align: center; }
+    </style></head><body>
+      <div class="header"><h1>${escapeHtml(activeProject.name)}</h1><div class="meta">Rapport généré le ${today}</div></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-value">${stats.total}</div><div class="stat-label">Total</div></div>
+        <div class="stat"><div class="stat-value">${stats.done}</div><div class="stat-label">Terminées</div></div>
+        <div class="stat"><div class="stat-value">${stats.overdue}</div><div class="stat-label">En retard</div></div>
+        <div class="stat"><div class="stat-value">${stats.progress}%</div><div class="stat-label">Progression</div></div>
+      </div>
+      ${columns.map(col => {
+        const tasks = activeProject.tasks.filter(t => t.status === col.id);
+        if (tasks.length === 0) return '';
+        return `<h2 class="${col.id}">${col.title} (${tasks.length})</h2>
+        ${tasks.map(t => `<div class="task">
+          <div class="task-title">${escapeHtml(t.title)}</div>
+          ${t.description ? `<p>${escapeHtml(t.description)}</p>` : ''}
+          <div>
+            <span class="badge">${priorities[t.priority].label}</span>
+            ${t.assignee ? `<span class="badge">${escapeHtml(t.assignee)}</span>` : ''}
+            ${t.dueDate ? `<span class="badge">${formatDate(t.dueDate)}</span>` : ''}
+            ${(t.tags || []).map(tag => `<span class="badge">#${escapeHtml(tag)}</span>`).join('')}
+          </div>
+        </div>`).join('')}`;
+      }).join('')}
+      <div class="footer">Généré avec Project Manager</div>
+    </body></html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    if (w) w.onload = () => setTimeout(() => w.print(), 250);
+    setShowExportMenu(false);
+  };
+
+  const exportToCSV = () => {
+    if (!activeProject) return;
+    const headers = ['Titre', 'Description', 'Statut', 'Priorité', 'Date début', 'Date échéance', 'Heures estimées', 'Assigné à', 'Tags', 'Récurrence', 'Sous-tâches (total)', 'Sous-tâches (terminées)', 'En retard', 'Date création'];
+    const statusMap = { todo: 'À faire', doing: 'En cours', review: 'À valider', done: 'Terminé' };
+    const csvCell = (val) => {
+      const s = String(val ?? '');
+      if (s.includes('"') || s.includes(',') || s.includes(';') || s.includes('\n')) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    };
+    const rows = activeProject.tasks.map(t => [t.title, (t.description || '').replace(/\n/g, ' '), statusMap[t.status] || t.status, priorities[t.priority]?.label || t.priority, t.startDate || '', t.dueDate || '', t.estimatedHours || '', t.assignee || '', (t.tags || []).join(', '), recurrenceOptions[t.recurrence] || 'Aucune', (t.subtasks || []).length, (t.subtasks || []).filter(s => s.done).length, isOverdue(t.dueDate) && t.status !== 'done' ? 'Oui' : 'Non', t.createdAt ? new Date(t.createdAt).toLocaleDateString('fr-FR') : '']);
+    const csv = '\uFEFF' + [headers, ...rows].map(r => r.map(csvCell).join(';')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${activeProject.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setShowExportMenu(false);
+  };
+
+  const exportJSON = () => {
+    if (!activeProject) return;
+    const blob = new Blob([JSON.stringify(activeProject, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${activeProject.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_backup.json`;
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setShowExportMenu(false);
+  };
+
+  const importJSON = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        const imported = { ...data, id: `proj_${Date.now()}`, name: `${data.name} (importé)`, archived: false };
+        setProjects(prev => [...prev, imported]);
+        setActiveProjectId(imported.id);
+        saveProject(imported);
+        setShowExportMenu(false);
+      } catch (err) { alert('Fichier invalide'); }
+    };
+    reader.readAsText(file);
+  };
+
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear(), month = date.getMonth();
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startDay = (new Date(year, month, 1).getDay() + 6) % 7;
+    const days = [];
+    const prevLastDay = new Date(year, month, 0).getDate();
+    for (let i = startDay - 1; i >= 0; i--) days.push({ day: prevLastDay - i, currentMonth: false, date: new Date(year, month - 1, prevLastDay - i) });
+    for (let i = 1; i <= daysInMonth; i++) days.push({ day: i, currentMonth: true, date: new Date(year, month, i) });
+    const remaining = (7 - (days.length % 7)) % 7;
+    for (let i = 1; i <= remaining; i++) days.push({ day: i, currentMonth: false, date: new Date(year, month + 1, i) });
+    return days;
+  };
+
+  const getTasksForDate = (date) => {
+    if (!activeProject) return [];
+    const dateStr = date.toISOString().split('T')[0];
+    return getFilteredTasks().filter(t => t.dueDate === dateStr);
+  };
+
+  const isSameDay = (d1, d2) => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); setShowCommandPalette(true); return; }
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target.isContentEditable) return;
+      if (e.key === '/') { e.preventDefault(); searchInputRef.current?.focus(); }
+      else if (e.key === 'n') { e.preventDefault(); setShowNewTask('todo'); }
+      else if (e.key === '1') setViewMode('focus');
+      else if (e.key === '2') setViewMode('kanban');
+      else if (e.key === '3') setViewMode('list');
+      else if (e.key === '4') setViewMode('calendar');
+      else if (e.key === '5') setViewMode('gantt');
+      else if (e.key === '6') setViewMode('dashboard');
+      else if (e.key === '?') { e.preventDefault(); setShowShortcuts(true); }
+      else if (e.key === 'Escape') {
+        setShowCommandPalette(false); setShowShortcuts(false); setShowActivity(false);
+        setShowSettings(false); setShowNotifications(false); setShowExportMenu(false); setShowProjectDropdown(false);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  if (loading) return <div className="flex items-center justify-center h-screen text-slate-500">Chargement...</div>;
+
+  const stats = getStats();
+  const allTags = getAllTags();
+  const filteredTasks = getFilteredTasks();
+  const nonArchivedProjects = projects.filter(p => !p.archived);
+  const archivedProjects = projects.filter(p => p.archived);
+  const rootProjects = nonArchivedProjects.filter(p => !p.parentId);
+  const getSubProjects = (parentId) => nonArchivedProjects.filter(p => p.parentId === parentId);
+
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 p-4 md:p-6 transition-colors">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div className="relative">
+              <button onClick={() => setShowProjectDropdown(!showProjectDropdown)} className="flex items-center gap-2 text-2xl md:text-3xl font-semibold text-slate-900 dark:text-slate-100 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                {activeProject?.parentId && <Folder size={20} className="text-slate-400" />}
+                {activeProject?.name || 'Projet'}
+                <ChevronDown size={24} className={`transition-transform ${showProjectDropdown ? 'rotate-180' : ''}`} />
+              </button>
+              {showProjectDropdown && (
+                <div className="absolute top-full left-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 min-w-[320px] z-20">
+                  <div className="p-2 max-h-96 overflow-y-auto">
+                    {rootProjects.map(project => (
+                      <ProjectTreeItem key={project.id} project={project} depth={0} activeProjectId={activeProjectId} getSubProjects={getSubProjects} onSelect={(id) => { setActiveProjectId(id); setShowProjectDropdown(false); }} onDelete={deleteProject} onArchive={toggleArchiveProject} onAddChild={(parentId) => { setNewProjectParent(parentId); setShowNewProject(true); }} />
+                    ))}
+                    {archivedProjects.length > 0 && (
+                      <div className="border-t border-slate-200 dark:border-slate-700 mt-2 pt-2">
+                        <button onClick={() => setShowArchived(!showArchived)} className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors">
+                          <ChevronRight size={12} className={`transition-transform ${showArchived ? 'rotate-90' : ''}`} />
+                          <Archive size={12} /> Archivés ({archivedProjects.length})
+                        </button>
+                        {showArchived && archivedProjects.map(p => (
+                          <div key={p.id} className="group flex items-center justify-between px-3 py-2 ml-4 rounded hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer opacity-60" onClick={() => { setActiveProjectId(p.id); setShowProjectDropdown(false); }}>
+                            <span className="text-xs text-slate-600 dark:text-slate-400 truncate flex-1">{p.name}</span>
+                            <div className="flex gap-1 opacity-0 group-hover:opacity-100">
+                              <button onClick={(e) => { e.stopPropagation(); toggleArchiveProject(p.id); }} className="text-slate-400 hover:text-blue-500"><Folder size={12} /></button>
+                              <button onClick={(e) => { e.stopPropagation(); deleteProject(p.id); }} className="text-slate-400 hover:text-red-500"><Trash2 size={12} /></button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <div className="border-t border-slate-200 dark:border-slate-700 p-2 space-y-1">
+                    {showNewProject ? (
+                      <div>
+                        {newProjectParent && <div className="text-xs text-slate-500 mb-1 px-2">Sous-projet de : <span className="font-medium">{projects.find(p => p.id === newProjectParent)?.name}</span><button onClick={() => setNewProjectParent(null)} className="ml-2 text-slate-400 hover:text-red-500"><X size={10} className="inline" /></button></div>}
+                        <div className="flex gap-2">
+                          <input type="text" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addProject(); if (e.key === 'Escape') { setShowNewProject(false); setNewProjectName(''); setNewProjectParent(null); } }} autoFocus placeholder="Nom du projet" className="flex-1 px-3 py-1.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none focus:border-blue-400" />
+                          <button onClick={addProject} className="p-1.5 bg-blue-500 text-white rounded hover:bg-blue-600"><Check size={14} /></button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <button onClick={() => setShowNewProject(true)} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"><FolderPlus size={14} /> Nouveau projet vide</button>
+                        <button onClick={() => { setShowTemplates(true); setShowProjectDropdown(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"><Sparkles size={14} /> Depuis un template</button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-medium ${syncStatus === 'online' ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300' : syncStatus === 'offline' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'}`} title={syncStatus === 'online' ? 'Synchronisé avec la base partagée' : syncStatus === 'offline' ? 'Mode hors-ligne (stockage local)' : 'Connexion en cours...'}>
+                <span className={`w-1.5 h-1.5 rounded-full ${syncStatus === 'online' ? 'bg-green-500 animate-pulse' : syncStatus === 'offline' ? 'bg-amber-500' : 'bg-slate-400'}`} />
+                {syncStatus === 'online' ? 'Partagé' : syncStatus === 'offline' ? 'Hors ligne' : '...'}
+              </div>
+              <div className="flex bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-1">
+                <button onClick={() => setViewMode('focus')} className={`p-1.5 rounded ${viewMode === 'focus' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Focus"><Target size={16} /></button>
+                <button onClick={() => setViewMode('kanban')} className={`p-1.5 rounded ${viewMode === 'kanban' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Kanban"><LayoutGrid size={16} /></button>
+                <button onClick={() => setViewMode('list')} className={`p-1.5 rounded ${viewMode === 'list' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Liste"><List size={16} /></button>
+                <button onClick={() => setViewMode('calendar')} className={`p-1.5 rounded ${viewMode === 'calendar' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Calendrier"><CalendarDays size={16} /></button>
+                <button onClick={() => setViewMode('gantt')} className={`p-1.5 rounded ${viewMode === 'gantt' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Gantt"><BarChart3 size={16} /></button>
+                <button onClick={() => setViewMode('dashboard')} className={`p-1.5 rounded ${viewMode === 'dashboard' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Dashboard"><TrendingUp size={16} /></button>
+              </div>
+
+              <button onClick={() => setShowCommandPalette(true)} className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" title="⌘K"><Search size={14} /><span className="hidden sm:inline text-xs">⌘K</span></button>
+
+              <div className="relative">
+                <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                  <Bell size={14} />
+                  {notifications.length > 0 && <span className={`absolute -top-1 -right-1 w-4 h-4 text-[9px] font-bold text-white rounded-full flex items-center justify-center ${notifications.some(n => n.severity === 3) ? 'bg-red-500 animate-pulse' : notifications.some(n => n.severity === 2) ? 'bg-orange-500' : 'bg-blue-500'}`}>{notifications.length > 9 ? '9+' : notifications.length}</span>}
+                </button>
+                {showNotifications && (
+                  <div className="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 w-80 max-h-96 overflow-y-auto z-20">
+                    <div className="p-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Notifications</h3>
+                      {typeof Notification !== 'undefined' && Notification.permission !== 'granted' && <button onClick={requestNotificationPermission} className="text-[10px] text-blue-500 hover:underline">Activer push</button>}
+                    </div>
+                    {notifications.length === 0 ? <p className="text-xs text-slate-400 text-center py-8">Rien à signaler ✨</p> : (
+                      <div className="divide-y divide-slate-200 dark:divide-slate-700">
+                        {notifications.map((n, idx) => (
+                          <div key={idx} className="p-3 hover:bg-slate-50 dark:hover:bg-slate-900/50 cursor-pointer" onClick={() => { setShowNotifications(false); setExpandedTask(n.task.id); }}>
+                            <div className="flex items-start gap-2">
+                              <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${n.type === 'overdue' ? 'bg-red-100 text-red-600' : n.type === 'today' ? 'bg-orange-100 text-orange-600' : n.type === 'urgent' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
+                                {n.type === 'urgent' ? <Zap size={12} /> : n.type === 'overdue' ? <Clock size={12} /> : <Calendar size={12} />}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="text-xs font-medium text-slate-900 dark:text-slate-100 truncate">{n.task.title}</div>
+                                <div className={`text-[11px] mt-0.5 ${n.severity === 3 ? 'text-red-600' : n.severity === 2 ? 'text-orange-600' : 'text-blue-600'}`}>{n.message}</div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <button onClick={() => setShowActivity(true)} className="p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" title="Historique"><History size={14} /></button>
+              <button onClick={() => setShowTeamModal(true)} className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                <Users size={14} /><span className="hidden sm:inline">Équipe</span>
+                {activeProject?.team?.length > 0 && <span className="text-xs bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-full">{activeProject.team.length}</span>}
+              </button>
+
+              <div className="relative">
+                <button onClick={() => setShowExportMenu(!showExportMenu)} className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                  <Download size={14} /><span className="hidden sm:inline">Export</span><ChevronDown size={12} />
+                </button>
+                {showExportMenu && (
+                  <div className="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 min-w-[200px] z-20 overflow-hidden">
+                    <button onClick={exportToPDF} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700"><FileText size={14} className="text-red-500" /> PDF</button>
+                    <button onClick={exportToCSV} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 border-t border-slate-200 dark:border-slate-700"><FileSpreadsheet size={14} className="text-green-500" /> CSV</button>
+                    <button onClick={exportJSON} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 border-t border-slate-200 dark:border-slate-700"><FileText size={14} className="text-blue-500" /> Backup JSON</button>
+                    <label className="w-full flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 border-t border-slate-200 dark:border-slate-700 cursor-pointer"><Upload size={14} className="text-purple-500" /> Importer JSON<input type="file" accept=".json" onChange={importJSON} className="hidden" /></label>
+                  </div>
+                )}
+              </div>
+
+              <button onClick={() => setShowSettings(true)} className="p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" title="Paramètres"><Settings size={14} /></button>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input ref={searchInputRef} type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Rechercher..." className="w-full pl-9 pr-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:border-blue-400" />
+              {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"><X size={14} /></button>}
+            </div>
+            <button onClick={() => setShowFilters(!showFilters)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm border transition-colors ${showFilters || filterPriority !== 'all' || filterTag !== 'all' || filterAssignee !== 'all' ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-300 text-blue-700' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700'}`}>
+              <Filter size={14} /> Filtres
+            </button>
+          </div>
+
+          {showFilters && (
+            <div className="flex flex-wrap gap-2 mb-3 p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+              <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className="text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none">
+                <option value="all">Toutes priorités</option>
+                {Object.entries(priorities).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+              </select>
+              <select value={filterTag} onChange={(e) => setFilterTag(e.target.value)} className="text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none">
+                <option value="all">Tous les tags</option>
+                {allTags.map(tag => <option key={tag} value={tag}>#{tag}</option>)}
+              </select>
+              <select value={filterAssignee} onChange={(e) => setFilterAssignee(e.target.value)} className="text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none">
+                <option value="all">Tout le monde</option>
+                <option value="unassigned">Non assigné</option>
+                {(activeProject?.team || []).map(m => <option key={m} value={m}>{m}</option>)}
+              </select>
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center gap-4 text-sm">
+            <div className="text-slate-600 dark:text-slate-400"><span className="font-medium text-slate-900 dark:text-slate-100">{stats.done}</span>/{stats.total} tâches</div>
+            {stats.dueToday > 0 && <div className="text-orange-600 font-medium flex items-center gap-1"><Target size={12} /> {stats.dueToday} aujourd'hui</div>}
+            {stats.overdue > 0 && <div className="text-red-600 font-medium flex items-center gap-1"><Clock size={12} /> {stats.overdue} en retard</div>}
+            <div className="flex items-center gap-2 flex-1 min-w-[150px] max-w-sm">
+              <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                <div className="h-full bg-green-500 transition-all duration-300" style={{ width: `${stats.progress}%` }} />
+              </div>
+              <div className="text-sm font-medium text-slate-900 dark:text-slate-100">{stats.progress}%</div>
+            </div>
+            <button onClick={() => setShowShortcuts(true)} className="text-xs text-slate-400 hover:text-slate-600 flex items-center gap-1"><Keyboard size={12} /> Raccourcis</button>
+          </div>
+        </div>
+
+        {showTemplates && <TemplatesModal templates={templates} onSelect={createFromTemplate} onClose={() => setShowTemplates(false)} />}
+        {showSettings && <SettingsModal settings={settings} onSave={saveSettings} onClose={() => setShowSettings(false)} onRequestNotif={requestNotificationPermission} />}
+        {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
+        {showActivity && <ActivityModal activity={activeProject?.activity || []} onClose={() => setShowActivity(false)} />}
+        {showCommandPalette && <CommandPalette projects={nonArchivedProjects} onSelectProject={(id) => { setActiveProjectId(id); setShowCommandPalette(false); }} onViewChange={(v) => { setViewMode(v); setShowCommandPalette(false); }} onNewTask={() => { setShowNewTask('todo'); setShowCommandPalette(false); }} onNewProject={() => { setShowTemplates(true); setShowCommandPalette(false); }} onClose={() => setShowCommandPalette(false)} />}
+
+        {showTeamModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowTeamModal(false)}>
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Équipe du projet</h2>
+                <button onClick={() => setShowTeamModal(false)}><X size={20} /></button>
+              </div>
+              <div className="flex gap-2 mb-4">
+                <input type="text" value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addTeamMember()} placeholder="Nom du membre" className="flex-1 px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:border-blue-400" />
+                <button onClick={addTeamMember} className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm">Ajouter</button>
+              </div>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {(activeProject?.team || []).length === 0 ? <p className="text-sm text-slate-400 text-center py-4">Aucun membre</p> : (activeProject?.team || []).map(member => (
+                  <div key={member} className="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-900 rounded">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-8 h-8 rounded-full ${getAvatarColor(member)} text-white flex items-center justify-center text-xs font-medium`}>{getInitials(member)}</div>
+                      <span className="text-sm">{member}</span>
+                    </div>
+                    <button onClick={() => removeTeamMember(member)} className="text-slate-400 hover:text-red-500"><Trash2 size={14} /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {viewMode === 'focus' && <FocusView tasks={activeProject?.tasks || []} columns={columns} priorities={priorities} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} onMoveTask={moveTask} getTagColor={getTagColor} />}
+
+        {viewMode === 'kanban' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {columns.map(column => {
+              const columnTasks = getTasksByStatus(column.id);
+              const isDropTarget = dragOverColumn === column.id;
+              return (
+                <div key={column.id} className={`${column.color} rounded-lg p-3 transition-all ${isDropTarget ? 'ring-2 ring-blue-400' : ''}`} onDragOver={(e) => handleDragOver(e, column.id)} onDragLeave={handleDragLeave} onDrop={(e) => handleDrop(e, column.id)}>
+                  <div className="flex items-center justify-between mb-3 px-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-medium text-sm">{column.title}</h3>
+                      <span className="text-xs bg-white dark:bg-slate-900 px-2 py-0.5 rounded-full">{columnTasks.length}</span>
+                    </div>
+                    <button onClick={() => setShowNewTask(column.id)} className="p-1 hover:bg-white dark:hover:bg-slate-900 rounded"><Plus size={16} /></button>
+                  </div>
+                  <div className="space-y-2 min-h-[100px]">
+                    {showNewTask === column.id && <NewTaskForm newTask={newTask} setNewTask={setNewTask} onSave={() => addTask(column.id)} onCancel={() => { setShowNewTask(null); setNewTask(defaultNewTask); }} priorities={priorities} recurrenceOptions={recurrenceOptions} team={activeProject?.team || []} />}
+                    {columnTasks.map(task => (
+                      <TaskCard key={task.id} task={task} column={column} isExpanded={expandedTask === task.id} isEditing={editingTask === task.id} onExpand={() => setExpandedTask(expandedTask === task.id ? null : task.id)} onEdit={() => setEditingTask(task.id)} onEditDone={() => setEditingTask(null)} onDelete={() => deleteTask(task.id)} onDuplicate={() => duplicateTask(task)} onUpdate={(updates) => updateTask(task.id, updates)} onDragStart={handleDragStart} onAddSubtask={(title) => addSubtask(task.id, title)} onToggleSubtask={(sid) => toggleSubtask(task.id, sid)} onDeleteSubtask={(sid) => deleteSubtask(task.id, sid)} onAddTag={(tag) => addTag(task.id, tag)} onRemoveTag={(tag) => removeTag(task.id, tag)} priorities={priorities} recurrenceOptions={recurrenceOptions} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} team={activeProject?.team || []} />
+                    ))}
+                    {columnTasks.length === 0 && showNewTask !== column.id && <div className="text-xs text-slate-400 text-center py-8">Glisse une tâche ici</div>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {viewMode === 'list' && (
+          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+            {filteredTasks.length === 0 ? <div className="text-center py-12 text-slate-400">Aucune tâche</div> : (
+              <div className="divide-y divide-slate-200 dark:divide-slate-700">
+                {filteredTasks.sort((a, b) => priorities[b.priority].order - priorities[a.priority].order).map(task => {
+                  const column = columns.find(c => c.id === task.status);
+                  return <ListRow key={task.id} task={task} column={column} onMove={(status) => moveTask(task.id, status)} onDelete={() => deleteTask(task.id)} onDuplicate={() => duplicateTask(task)} onToggleSubtask={(sid) => toggleSubtask(task.id, sid)} isExpanded={expandedTask === task.id} onExpand={() => setExpandedTask(expandedTask === task.id ? null : task.id)} columns={columns} priorities={priorities} recurrenceOptions={recurrenceOptions} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} />;
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {viewMode === 'calendar' && <CalendarView calendarDate={calendarDate} setCalendarDate={setCalendarDate} selectedDate={selectedCalendarDate} setSelectedDate={setSelectedCalendarDate} getDaysInMonth={getDaysInMonth} getTasksForDate={getTasksForDate} filteredTasks={filteredTasks} isSameDay={isSameDay} columns={columns} priorities={priorities} onMoveTask={moveTask} isOverdue={isOverdue} />}
+        {viewMode === 'gantt' && <GanttView tasks={filteredTasks} columns={columns} priorities={priorities} formatDate={formatDate} />}
+        {viewMode === 'dashboard' && <DashboardView activeProject={activeProject} tasks={activeProject?.tasks || []} columns={columns} priorities={priorities} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} isOverdue={isOverdue} />}
+
+        <div className="mt-6 text-xs text-slate-400 text-center">Version HTML standalone · {templates.length} templates · 6 vues · Sauvegarde locale</div>
+      </div>
+    </div>
+  );
+}
+
+function TemplatesModal({ templates, onSelect, onClose }) {
+  const [filter, setFilter] = useState('all');
+  const categories = ['all', ...new Set(templates.map(t => t.category))];
+  const filtered = filter === 'all' ? templates : templates.filter(t => t.category === filter);
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[80vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold flex items-center gap-2"><Sparkles size={20} className="text-blue-500" /> Templates</h2>
+            <p className="text-sm text-slate-500 mt-1">Démarre rapidement</p>
+          </div>
+          <button onClick={onClose}><X size={20} /></button>
+        </div>
+        <div className="px-6 pt-4 flex gap-2 flex-wrap">
+          {categories.map(c => <button key={c} onClick={() => setFilter(c)} className={`px-3 py-1 text-xs rounded-full transition-colors ${filter === c ? 'bg-blue-500 text-white' : 'bg-slate-100 dark:bg-slate-700'}`}>{c === 'all' ? 'Tous' : c}</button>)}
+        </div>
+        <div className="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-3">
+          {filtered.map(t => (
+            <button key={t.id} onClick={() => onSelect(t)} className="text-left p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all">
+              <div className="flex items-start gap-3">
+                <div className="text-3xl">{t.icon}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-sm font-semibold">{t.name}</h3>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500">{t.category}</span>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">{t.description}</p>
+                  <div className="text-[10px] text-slate-400">{t.tasks.length} tâches prêtes</div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SettingsModal({ settings, onSave, onClose, onRequestNotif }) {
+  const [local, setLocal] = useState(settings);
+  const update = (key, value) => setLocal(prev => ({ ...prev, [key]: value }));
+  const updateEvent = (key, value) => setLocal(prev => ({ ...prev, webhookEvents: { ...prev.webhookEvents, [key]: value } }));
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-lg w-full max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-800">
+          <h2 className="text-lg font-semibold flex items-center gap-2"><Settings size={18} /> Paramètres</h2>
+          <button onClick={onClose}><X size={20} /></button>
+        </div>
+        <div className="p-6 space-y-6">
+          <div>
+            <h3 className="text-sm font-semibold mb-3">Apparence</h3>
+            <div className="grid grid-cols-3 gap-2">
+              {[{ k: 'light', l: 'Clair', i: Sun }, { k: 'dark', l: 'Sombre', i: Moon }, { k: 'system', l: 'Auto', i: Monitor }].map(({ k, l, i: IconC }) => (
+                <button key={k} onClick={() => update('theme', k)} className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${local.theme === k ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-600' : 'border-slate-200 dark:border-slate-700 text-slate-600'}`}>
+                  <IconC size={20} /><span className="text-xs font-medium">{l}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold mb-3">Notifications</h3>
+            <label className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-lg cursor-pointer">
+              <div><div className="text-sm">Alertes in-app</div><div className="text-xs text-slate-500">Badges et panneau</div></div>
+              <input type="checkbox" checked={local.notificationsEnabled} onChange={(e) => update('notificationsEnabled', e.target.checked)} className="w-4 h-4 accent-blue-500" />
+            </label>
+            <button onClick={onRequestNotif} className="mt-2 w-full text-xs px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-lg">Autoriser notifications push</button>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold mb-3 flex items-center gap-2"><Webhook size={16} /> Webhook (n8n, Zapier, etc.)</h3>
+            <input type="url" value={local.webhookUrl} onChange={(e) => update('webhookUrl', e.target.value)} placeholder="https://..." className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none" />
+            <div className="mt-3 space-y-2">
+              {[{ k: 'taskCreated', l: 'Tâche créée' }, { k: 'taskCompleted', l: 'Tâche terminée' }, { k: 'taskOverdue', l: 'Tâche en retard' }].map(({ k, l }) => (
+                <label key={k} className="flex items-center gap-2 text-xs">
+                  <input type="checkbox" checked={local.webhookEvents[k]} onChange={(e) => updateEvent(k, e.target.checked)} className="accent-blue-500" />{l}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <button onClick={onClose} className="px-4 py-2 text-sm">Annuler</button>
+            <button onClick={() => { onSave(local); onClose(); }} className="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600">Enregistrer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ShortcutsModal({ onClose }) {
+  const shortcuts = [{ keys: ['⌘', 'K'], label: 'Palette de commandes' }, { keys: ['/'], label: 'Recherche' }, { keys: ['N'], label: 'Nouvelle tâche' }, { keys: ['1'], label: 'Focus' }, { keys: ['2'], label: 'Kanban' }, { keys: ['3'], label: 'Liste' }, { keys: ['4'], label: 'Calendrier' }, { keys: ['5'], label: 'Gantt' }, { keys: ['6'], label: 'Dashboard' }, { keys: ['?'], label: 'Raccourcis' }, { keys: ['Esc'], label: 'Fermer' }];
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+          <h2 className="text-lg font-semibold flex items-center gap-2"><Keyboard size={18} /> Raccourcis</h2>
+          <button onClick={onClose}><X size={20} /></button>
+        </div>
+        <div className="p-6 space-y-2">
+          {shortcuts.map((s, idx) => (
+            <div key={idx} className="flex items-center justify-between py-2">
+              <span className="text-sm">{s.label}</span>
+              <div className="flex gap-1">{s.keys.map((k, i) => <kbd key={i} className="px-2 py-1 text-xs font-mono bg-slate-100 dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600">{k}</kbd>)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityModal({ activity, onClose }) {
+  const formatTime = (ts) => {
+    const d = new Date(ts), now = new Date();
+    const mins = Math.floor((now - d) / 60000);
+    if (mins < 1) return "à l'instant";
+    if (mins < 60) return `il y a ${mins} min`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `il y a ${hours}h`;
+    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  };
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-lg w-full max-h-[80vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+          <h2 className="text-lg font-semibold flex items-center gap-2"><History size={18} /> Historique</h2>
+          <button onClick={onClose}><X size={20} /></button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-6">
+          {activity.length === 0 ? <p className="text-sm text-slate-400 text-center py-8">Aucune activité</p> : (
+            <div className="space-y-3">
+              {activity.map(a => (
+                <div key={a.id} className="flex gap-3">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 mt-1.5 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm"><span className="font-medium">{a.action}</span> — <span className="text-slate-600">{a.detail}</span></div>
+                    <div className="text-xs text-slate-400 mt-0.5">{formatTime(a.timestamp)}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CommandPalette({ projects, onSelectProject, onViewChange, onNewTask, onNewProject, onClose }) {
+  const [query, setQuery] = useState('');
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const commands = useMemo(() => {
+    const all = [
+      { id: 'new-task', label: 'Nouvelle tâche', icon: Plus, action: onNewTask, category: 'Action' },
+      { id: 'new-project', label: 'Nouveau projet depuis template', icon: Sparkles, action: onNewProject, category: 'Action' },
+      { id: 'view-focus', label: 'Vue : Focus', icon: Target, action: () => onViewChange('focus'), category: 'Vue' },
+      { id: 'view-kanban', label: 'Vue : Kanban', icon: LayoutGrid, action: () => onViewChange('kanban'), category: 'Vue' },
+      { id: 'view-list', label: 'Vue : Liste', icon: List, action: () => onViewChange('list'), category: 'Vue' },
+      { id: 'view-calendar', label: 'Vue : Calendrier', icon: CalendarDays, action: () => onViewChange('calendar'), category: 'Vue' },
+      { id: 'view-gantt', label: 'Vue : Gantt', icon: BarChart3, action: () => onViewChange('gantt'), category: 'Vue' },
+      { id: 'view-dashboard', label: 'Vue : Dashboard', icon: TrendingUp, action: () => onViewChange('dashboard'), category: 'Vue' },
+      ...projects.map(p => ({ id: `proj-${p.id}`, label: p.name, icon: Folder, action: () => onSelectProject(p.id), category: 'Projet' }))
+    ];
+    if (!query) return all;
+    const q = query.toLowerCase();
+    return all.filter(c => c.label.toLowerCase().includes(q));
+  }, [query, projects]);
+  useEffect(() => { setSelectedIdx(0); }, [query]);
+  const handleKey = (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setSelectedIdx(i => Math.min(i + 1, commands.length - 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setSelectedIdx(i => Math.max(i - 1, 0)); }
+    else if (e.key === 'Enter') { e.preventDefault(); commands[selectedIdx]?.action(); }
+  };
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-start justify-center z-50 p-4 pt-20" onClick={onClose}>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-lg w-full overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="p-3 border-b border-slate-200 dark:border-slate-700">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={handleKey} autoFocus placeholder="Commande..." className="w-full pl-9 pr-3 py-2 text-sm bg-transparent border-none focus:outline-none" />
+          </div>
+        </div>
+        <div className="max-h-96 overflow-y-auto p-2">
+          {commands.length === 0 ? <div className="text-center text-sm text-slate-400 py-8">Aucun résultat</div> : commands.map((c, idx) => {
+            const IconC = c.icon;
+            return <button key={c.id} onClick={c.action} onMouseEnter={() => setSelectedIdx(idx)} className={`w-full flex items-center gap-3 px-3 py-2 rounded text-left transition-colors ${idx === selectedIdx ? 'bg-blue-50 dark:bg-blue-900/30' : 'hover:bg-slate-50 dark:hover:bg-slate-900'}`}>
+              <IconC size={14} className="text-slate-400 shrink-0" /><span className="text-sm flex-1">{c.label}</span><span className="text-[10px] text-slate-400">{c.category}</span>
+            </button>;
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectTreeItem({ project, depth, activeProjectId, getSubProjects, onSelect, onDelete, onArchive, onAddChild }) {
+  const subProjects = getSubProjects(project.id);
+  const [expanded, setExpanded] = useState(true);
+  const hasChildren = subProjects.length > 0;
+  const isActive = project.id === activeProjectId;
+  return (
+    <>
+      <div className={`group flex items-center justify-between px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer ${isActive ? 'bg-slate-100 dark:bg-slate-700' : ''}`} style={{ paddingLeft: `${12 + depth * 16}px` }} onClick={() => onSelect(project.id)}>
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          {hasChildren ? <button onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }} className="text-slate-400"><ChevronRight size={12} className={`transition-transform ${expanded ? 'rotate-90' : ''}`} /></button> : <span className="w-3" />}
+          {hasChildren && expanded ? <FolderOpen size={14} className="text-slate-400" /> : <Folder size={14} className="text-slate-400" />}
+          {isActive && <Check size={12} className="text-blue-500" />}
+          <span className="text-sm truncate">{project.name}</span>
+          <span className="text-xs text-slate-400">({project.tasks.length})</span>
+        </div>
+        <div className="flex gap-1 opacity-0 group-hover:opacity-100 ml-2">
+          <button onClick={(e) => { e.stopPropagation(); onAddChild(project.id); }} className="text-slate-400 hover:text-blue-500"><Plus size={12} /></button>
+          <button onClick={(e) => { e.stopPropagation(); onArchive(project.id); }} className="text-slate-400 hover:text-amber-500"><Archive size={12} /></button>
+          <button onClick={(e) => { e.stopPropagation(); onDelete(project.id); }} className="text-slate-400 hover:text-red-500"><Trash2 size={12} /></button>
+        </div>
+      </div>
+      {hasChildren && expanded && subProjects.map(sub => <ProjectTreeItem key={sub.id} project={sub} depth={depth + 1} activeProjectId={activeProjectId} getSubProjects={getSubProjects} onSelect={onSelect} onDelete={onDelete} onArchive={onArchive} onAddChild={onAddChild} />)}
+    </>
+  );
+}
+
+function NewTaskForm({ newTask, setNewTask, onSave, onCancel, priorities, recurrenceOptions, team }) {
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-blue-200 dark:border-blue-800">
+      <input type="text" placeholder="Titre" value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSave(); } if (e.key === 'Escape') onCancel(); }} autoFocus className="w-full text-sm font-medium bg-transparent border-none focus:outline-none mb-2" />
+      <textarea placeholder="Description" value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} rows={2} className="w-full text-xs bg-transparent border-none focus:outline-none text-slate-600 dark:text-slate-400 resize-none mb-2" />
+      <div className="flex gap-2 mb-2 flex-wrap">
+        <select value={newTask.priority} onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })} className="text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none">
+          {Object.entries(priorities).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
+        </select>
+        <input type="number" placeholder="h" min="0" step="0.5" value={newTask.estimatedHours} onChange={(e) => setNewTask({ ...newTask, estimatedHours: e.target.value })} className="text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none w-16" />
+      </div>
+      <div className="flex gap-2 mb-2">
+        <div className="flex-1"><label className="text-[10px] text-slate-400 block mb-0.5">Début</label><input type="date" value={newTask.startDate} onChange={(e) => setNewTask({ ...newTask, startDate: e.target.value })} className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded" /></div>
+        <div className="flex-1"><label className="text-[10px] text-slate-400 block mb-0.5">Échéance</label><input type="date" value={newTask.dueDate} onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })} className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded" /></div>
+      </div>
+      <select value={newTask.recurrence} onChange={(e) => setNewTask({ ...newTask, recurrence: e.target.value })} className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded mb-2">
+        {Object.entries(recurrenceOptions).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+      </select>
+      {team.length > 0 && <select value={newTask.assignee} onChange={(e) => setNewTask({ ...newTask, assignee: e.target.value })} className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded mb-2"><option value="">Non assigné</option>{team.map(m => <option key={m} value={m}>{m}</option>)}</select>}
+      <div className="flex gap-2 justify-end">
+        <button onClick={onCancel} className="px-3 py-1 text-xs text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 rounded">Annuler</button>
+        <button onClick={onSave} className="px-3 py-1 text-xs bg-blue-500 text-white hover:bg-blue-600 rounded">Ajouter</button>
+      </div>
+    </div>
+  );
+}
+
+function TaskCard({ task, column, isExpanded, isEditing, onExpand, onEdit, onEditDone, onDelete, onDuplicate, onUpdate, onDragStart, onAddSubtask, onToggleSubtask, onDeleteSubtask, onAddTag, onRemoveTag, priorities, recurrenceOptions, getTagColor, getAvatarColor, getInitials, formatDate, isOverdue, team }) {
+  const [newSubtask, setNewSubtask] = useState('');
+  const [newTag, setNewTag] = useState('');
+  const subtasksCount = (task.subtasks || []).length;
+  const subtasksDone = (task.subtasks || []).filter(s => s.done).length;
+  const isUrgent = task.priority === 'urgent' && task.status !== 'done';
+
+  if (isEditing) {
+    return (
+      <div className={`bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border-l-4 ${column.accent}`}>
+        <input type="text" value={task.title} onChange={(e) => onUpdate({ title: e.target.value })} onKeyDown={(e) => { if (e.key === 'Enter') onEditDone(); }} autoFocus className="w-full text-sm font-medium bg-transparent border-none focus:outline-none mb-2" />
+        <textarea value={task.description || ''} onChange={(e) => onUpdate({ description: e.target.value })} placeholder="Description" rows={2} className="w-full text-xs bg-transparent border-none focus:outline-none text-slate-600 dark:text-slate-400 resize-none mb-2" />
+        <div className="flex gap-2 mb-2 flex-wrap">
+          <select value={task.priority} onChange={(e) => onUpdate({ priority: e.target.value })} className="text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded">
+            {Object.entries(priorities).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
+          </select>
+          <input type="number" placeholder="h" min="0" step="0.5" value={task.estimatedHours || ''} onChange={(e) => onUpdate({ estimatedHours: e.target.value })} className="text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded w-16" />
+        </div>
+        <div className="flex gap-2 mb-2">
+          <input type="date" value={task.startDate || ''} onChange={(e) => onUpdate({ startDate: e.target.value })} className="flex-1 text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded" />
+          <input type="date" value={task.dueDate || ''} onChange={(e) => onUpdate({ dueDate: e.target.value })} className="flex-1 text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded" />
+        </div>
+        <select value={task.recurrence || 'none'} onChange={(e) => onUpdate({ recurrence: e.target.value })} className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded mb-2">
+          {Object.entries(recurrenceOptions).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+        </select>
+        {team.length > 0 && <select value={task.assignee || ''} onChange={(e) => onUpdate({ assignee: e.target.value })} className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded mb-2"><option value="">Non assigné</option>{team.map(m => <option key={m} value={m}>{m}</option>)}</select>}
+        <div className="flex justify-end"><button onClick={onEditDone} className="px-3 py-1 text-xs bg-blue-500 text-white rounded">OK</button></div>
+      </div>
+    );
+  }
+
+  return (
+    <div draggable onDragStart={(e) => onDragStart(e, task)} className={`bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border-l-4 ${column.accent} hover:shadow-md transition-shadow cursor-move group ${isUrgent ? 'ring-1 ring-red-300 dark:ring-red-800' : ''}`}>
+      <div className="flex items-start justify-between gap-2 mb-1">
+        <h4 onClick={onExpand} className="text-sm font-medium flex-1 cursor-pointer hover:text-blue-600 flex items-center gap-1">{isUrgent && <Zap size={12} className="text-red-500" />}{task.title}</h4>
+        <div className="flex gap-1 opacity-0 group-hover:opacity-100">
+          <button onClick={onDuplicate} className="p-1 text-slate-400 hover:text-blue-500"><Copy size={12} /></button>
+          <button onClick={onEdit} className="p-1 text-slate-400 hover:text-blue-500"><Edit2 size={12} /></button>
+          <button onClick={onDelete} className="p-1 text-slate-400 hover:text-red-500"><Trash2 size={12} /></button>
+        </div>
+      </div>
+      {task.description && !isExpanded && <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 line-clamp-2">{task.description}</p>}
+      {isExpanded && task.description && <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 whitespace-pre-wrap">{task.description}</p>}
+      <div className="flex items-center gap-1.5 flex-wrap mb-1.5">
+        <span className={`text-xs px-2 py-0.5 rounded-full ${priorities[task.priority].bg} ${priorities[task.priority].color} font-medium`}><Flag size={10} className="inline mr-1" />{priorities[task.priority].label}</span>
+        {task.dueDate && <span className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${isOverdue(task.dueDate) && task.status !== 'done' ? 'bg-red-100 dark:bg-red-900/40 text-red-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'}`}><Calendar size={10} />{formatDate(task.dueDate)}</span>}
+        {task.estimatedHours && <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 flex items-center gap-1"><Clock size={10} />{task.estimatedHours}h</span>}
+        {task.recurrence && task.recurrence !== 'none' && <span className="text-xs px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 flex items-center gap-1"><Repeat size={10} />{recurrenceOptions[task.recurrence]}</span>}
+        {task.assignee && <span className="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center gap-1"><span className={`w-4 h-4 rounded-full ${getAvatarColor(task.assignee)} text-white flex items-center justify-center text-[9px]`}>{getInitials(task.assignee)}</span>{task.assignee}</span>}
+        {subtasksCount > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 flex items-center gap-1"><CheckCircle2 size={10} />{subtasksDone}/{subtasksCount}</span>}
+      </div>
+      {(task.tags || []).length > 0 && (
+        <div className="flex flex-wrap gap-1 mb-1.5">
+          {(task.tags || []).map(tag => { const tc = getTagColor(tag); return <span key={tag} className={`text-xs px-2 py-0.5 rounded-full ${tc.bg} ${tc.text} flex items-center gap-1 group/tag`}>#{tag}<button onClick={() => onRemoveTag(tag)} className="opacity-0 group-hover/tag:opacity-100"><X size={10} /></button></span>; })}
+        </div>
+      )}
+      {isExpanded && (
+        <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-3">
+          <div>
+            <div className="text-xs font-medium text-slate-500 mb-1.5 flex items-center gap-1"><CheckCircle2 size={12} /> Sous-tâches</div>
+            <div className="space-y-1">
+              {(task.subtasks || []).map(s => (
+                <div key={s.id} className="flex items-center gap-2 group/st">
+                  <button onClick={() => onToggleSubtask(s.id)}>{s.done ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className="text-slate-400" />}</button>
+                  <span className={`text-xs flex-1 ${s.done ? 'line-through text-slate-400' : ''}`}>{s.title}</span>
+                  <button onClick={() => onDeleteSubtask(s.id)} className="opacity-0 group-hover/st:opacity-100 text-slate-400 hover:text-red-500"><X size={12} /></button>
+                </div>
+              ))}
+              <input type="text" value={newSubtask} onChange={(e) => setNewSubtask(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { onAddSubtask(newSubtask); setNewSubtask(''); } }} placeholder="+ sous-tâche" className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded mt-1" />
+            </div>
+          </div>
+          <div>
+            <div className="text-xs font-medium text-slate-500 mb-1.5 flex items-center gap-1"><Tag size={12} /> Tags</div>
+            <input type="text" value={newTag} onChange={(e) => setNewTag(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { onAddTag(newTag); setNewTag(''); } }} placeholder="+ tag" className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded" />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ListRow({ task, column, onMove, onDelete, onDuplicate, onToggleSubtask, isExpanded, onExpand, columns, priorities, recurrenceOptions, getTagColor, getAvatarColor, getInitials, formatDate, isOverdue }) {
+  const subtasksCount = (task.subtasks || []).length;
+  const subtasksDone = (task.subtasks || []).filter(s => s.done).length;
+  return (
+    <div className="hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
+      <div className="flex items-center gap-3 p-3 group">
+        <button onClick={onExpand} className="text-slate-400"><ChevronRight size={14} className={`transition-transform ${isExpanded ? 'rotate-90' : ''}`} /></button>
+        <select value={task.status} onChange={(e) => onMove(e.target.value)} onClick={(e) => e.stopPropagation()} className={`text-xs px-2 py-1 rounded border ${column.accent} bg-white dark:bg-slate-800`}>
+          {columns.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+        </select>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-medium truncate">{task.title}</div>
+          <div className="flex items-center gap-1.5 flex-wrap mt-1">
+            <span className={`text-xs px-2 py-0.5 rounded-full ${priorities[task.priority].bg} ${priorities[task.priority].color}`}>{priorities[task.priority].label}</span>
+            {task.dueDate && <span className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${isOverdue(task.dueDate) && task.status !== 'done' ? 'bg-red-100 text-red-600' : 'bg-slate-100 dark:bg-slate-700'}`}><Calendar size={10} />{formatDate(task.dueDate)}</span>}
+            {task.assignee && <span className="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center gap-1"><span className={`w-4 h-4 rounded-full ${getAvatarColor(task.assignee)} text-white flex items-center justify-center text-[9px]`}>{getInitials(task.assignee)}</span>{task.assignee}</span>}
+            {subtasksCount > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700">{subtasksDone}/{subtasksCount}</span>}
+            {(task.tags || []).map(tag => { const tc = getTagColor(tag); return <span key={tag} className={`text-xs px-2 py-0.5 rounded-full ${tc.bg} ${tc.text}`}>#{tag}</span>; })}
+          </div>
+        </div>
+        <div className="flex gap-1 opacity-0 group-hover:opacity-100">
+          <button onClick={onDuplicate} className="p-1 text-slate-400 hover:text-blue-500"><Copy size={14} /></button>
+          <button onClick={onDelete} className="p-1 text-slate-400 hover:text-red-500"><Trash2 size={14} /></button>
+        </div>
+      </div>
+      {isExpanded && (
+        <div className="px-3 pb-3 pl-12 space-y-2">
+          {task.description && <p className="text-xs text-slate-600 dark:text-slate-400 whitespace-pre-wrap">{task.description}</p>}
+          {subtasksCount > 0 && <div className="space-y-1">{task.subtasks.map(s => <div key={s.id} className="flex items-center gap-2"><button onClick={() => onToggleSubtask(s.id)}>{s.done ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className="text-slate-400" />}</button><span className={`text-xs ${s.done ? 'line-through text-slate-400' : ''}`}>{s.title}</span></div>)}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CalendarView({ calendarDate, setCalendarDate, selectedDate, setSelectedDate, getDaysInMonth, getTasksForDate, filteredTasks, isSameDay, columns, priorities, onMoveTask, isOverdue }) {
+  const days = getDaysInMonth(calendarDate);
+  const monthName = calendarDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+  const today = new Date();
+  const weekDays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  const selectedTasks = selectedDate ? getTasksForDate(selectedDate) : [];
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold capitalize">{monthName}</h3>
+          <div className="flex items-center gap-1">
+            <button onClick={() => { setCalendarDate(new Date()); setSelectedDate(new Date()); }} className="text-xs px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">Aujourd'hui</button>
+            <button onClick={() => { const d = new Date(calendarDate); d.setMonth(d.getMonth() - 1); setCalendarDate(d); }} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"><ChevronLeft size={16} /></button>
+            <button onClick={() => { const d = new Date(calendarDate); d.setMonth(d.getMonth() + 1); setCalendarDate(d); }} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"><ChevronRight size={16} /></button>
+          </div>
+        </div>
+        <div className="grid grid-cols-7 gap-1 mb-1">{weekDays.map(d => <div key={d} className="text-xs font-medium text-slate-500 text-center py-1">{d}</div>)}</div>
+        <div className="grid grid-cols-7 gap-1">
+          {days.map((dayObj, idx) => {
+            const tasksForDay = getTasksForDate(dayObj.date);
+            const isToday = isSameDay(dayObj.date, today);
+            const isSelected = selectedDate && isSameDay(dayObj.date, selectedDate);
+            return (
+              <button key={idx} onClick={() => setSelectedDate(dayObj.date)} className={`aspect-square min-h-[60px] p-1.5 rounded-lg border text-left transition-all relative ${!dayObj.currentMonth ? 'opacity-40' : ''} ${isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30' : isToday ? 'border-blue-300 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900/50'}`}>
+                <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-600' : ''}`}>{dayObj.day}</div>
+                {tasksForDay.length > 0 && (
+                  <div className="space-y-0.5">
+                    {tasksForDay.slice(0, 3).map(t => {
+                      const isLate = isOverdue(t.dueDate) && t.status !== 'done';
+                      return <div key={t.id} className={`text-[10px] px-1 py-0.5 rounded truncate ${isLate ? 'bg-red-100 text-red-700' : t.status === 'done' ? 'bg-green-100 text-green-700 line-through' : 'bg-slate-100 dark:bg-slate-700'}`}>{t.title}</div>;
+                    })}
+                    {tasksForDay.length > 3 && <div className="text-[10px] text-slate-500">+{tasksForDay.length - 3}</div>}
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div>
+        {selectedDate && (
+          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+            <h3 className="text-sm font-semibold mb-3">{selectedDate.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</h3>
+            {selectedTasks.length === 0 ? <p className="text-xs text-slate-400 text-center py-4">Aucune tâche</p> : (
+              <div className="space-y-2">
+                {selectedTasks.map(t => {
+                  const col = columns.find(c => c.id === t.status);
+                  return (
+                    <div key={t.id} className={`p-2 rounded-lg border-l-4 ${col.accent} bg-slate-50 dark:bg-slate-900`}>
+                      <div className="text-sm font-medium mb-1">{t.title}</div>
+                      <select value={t.status} onChange={(e) => onMoveTask(t.id, e.target.value)} className="text-[10px] px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded w-full mt-1">
+                        {columns.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                      </select>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function GanttView({ tasks, columns, priorities, formatDate }) {
+  const tasksWithDates = tasks.filter(t => t.startDate && t.dueDate).sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+  if (tasksWithDates.length === 0) {
+    return <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-12 text-center">
+      <BarChart3 size={48} className="mx-auto text-slate-300 mb-4" />
+      <h3 className="text-lg font-medium mb-2">Diagramme de Gantt</h3>
+      <p className="text-sm text-slate-500">Ajoute des dates de début et de fin à tes tâches pour les voir apparaître ici.</p>
+    </div>;
+  }
+  const allDates = tasksWithDates.flatMap(t => [new Date(t.startDate), new Date(t.dueDate)]);
+  const minDate = new Date(Math.min(...allDates));
+  const maxDate = new Date(Math.max(...allDates));
+  minDate.setDate(minDate.getDate() - 2);
+  maxDate.setDate(maxDate.getDate() + 2);
+  const totalDays = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24));
+  const dayWidth = Math.max(30, Math.min(60, 800 / totalDays));
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const getDayOffset = (date) => Math.floor((new Date(date) - minDate) / (1000 * 60 * 60 * 24));
+  const getDuration = (start, end) => Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1);
+  const months = [];
+  let cursor = new Date(minDate);
+  while (cursor <= maxDate) {
+    months.push({ name: cursor.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' }), offset: getDayOffset(cursor), daysInMonth: new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0).getDate() });
+    cursor.setMonth(cursor.getMonth() + 1);
+    cursor.setDate(1);
+  }
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div className="p-4 border-b border-slate-200 dark:border-slate-700">
+        <h3 className="text-lg font-semibold flex items-center gap-2"><BarChart3 size={18} /> Gantt</h3>
+      </div>
+      <div className="overflow-x-auto">
+        <div style={{ minWidth: `${300 + totalDays * dayWidth}px` }}>
+          <div className="flex border-b border-slate-200 dark:border-slate-700">
+            <div style={{ width: 300 }} className="shrink-0 p-3 text-xs font-medium text-slate-500 border-r border-slate-200 dark:border-slate-700">Tâche</div>
+            <div className="relative flex-1" style={{ height: 40 }}>
+              {months.map((m, idx) => <div key={idx} className="absolute top-0 h-full flex items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-400 border-r border-slate-200 dark:border-slate-700 capitalize" style={{ left: m.offset * dayWidth, width: m.daysInMonth * dayWidth }}>{m.name}</div>)}
+            </div>
+          </div>
+          {tasksWithDates.map((task) => {
+            const startOffset = getDayOffset(task.startDate);
+            const duration = getDuration(task.startDate, task.dueDate);
+            const col = columns.find(c => c.id === task.status);
+            const subtasksCount = (task.subtasks || []).length;
+            const subtasksDone = (task.subtasks || []).filter(s => s.done).length;
+            const taskProgress = task.status === 'done' ? 100 : subtasksCount > 0 ? (subtasksDone / subtasksCount) * 100 : task.status === 'doing' ? 50 : task.status === 'review' ? 75 : 0;
+            return (
+              <div key={task.id} className="flex border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-900/30">
+                <div style={{ width: 300 }} className="shrink-0 p-3 border-r border-slate-200 dark:border-slate-700">
+                  <div className="text-sm font-medium truncate">{task.title}</div>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${priorities[task.priority].bg} ${priorities[task.priority].color}`}>{priorities[task.priority].label}</span>
+                    <span className="text-[10px] text-slate-500">{duration}j</span>
+                  </div>
+                </div>
+                <div className="relative flex-1" style={{ height: 56 }}>
+                  {today >= minDate && today <= maxDate && <div className="absolute top-0 bottom-0 w-px bg-red-400" style={{ left: getDayOffset(today) * dayWidth }} />}
+                  <div className="absolute top-1/2 -translate-y-1/2 rounded overflow-hidden shadow-sm" style={{ left: startOffset * dayWidth + 2, width: duration * dayWidth - 4, height: 28, backgroundColor: col.gantt + '40' }}>
+                    <div className="h-full transition-all" style={{ width: `${taskProgress}%`, backgroundColor: col.gantt }} />
+                    <div className="absolute inset-0 flex items-center px-2"><span className="text-[10px] font-medium truncate">{task.title}</span></div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FocusView({ tasks, columns, priorities, getAvatarColor, getInitials, formatDate, isOverdue, onMoveTask, getTagColor }) {
+  const today = new Date().toISOString().split('T')[0];
+  const todayTasks = tasks.filter(t => t.dueDate === today && t.status !== 'done');
+  const overdueTasks = tasks.filter(t => isOverdue(t.dueDate) && t.status !== 'done');
+  const urgentTasks = tasks.filter(t => t.priority === 'urgent' && t.status !== 'done' && t.dueDate !== today && !isOverdue(t.dueDate));
+  const inProgressTasks = tasks.filter(t => t.status === 'doing' && t.dueDate !== today && !isOverdue(t.dueDate) && t.priority !== 'urgent');
+  const totalFocus = todayTasks.length + overdueTasks.length + urgentTasks.length + inProgressTasks.length;
+  const todayDate = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const renderSection = (title, items, icon, color) => {
+    if (items.length === 0) return null;
+    return (
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className={`px-4 py-3 flex items-center gap-2 ${color}`}>{icon}<h3 className="text-sm font-semibold">{title}</h3><span className="ml-auto text-xs opacity-70">{items.length}</span></div>
+        <div className="divide-y divide-slate-200 dark:divide-slate-700">
+          {items.map(t => {
+            const col = columns.find(c => c.id === t.status);
+            return (
+              <div key={t.id} className="p-3 hover:bg-slate-50 dark:hover:bg-slate-900/50">
+                <div className="flex items-start gap-3">
+                  <button onClick={() => onMoveTask(t.id, 'done')} className="shrink-0 mt-0.5 text-slate-300 hover:text-green-500"><Circle size={18} /></button>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium">{t.title}</div>
+                    {t.description && <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{t.description}</p>}
+                    <div className="flex items-center gap-1.5 flex-wrap mt-1.5">
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${priorities[t.priority].bg} ${priorities[t.priority].color} font-medium`}>{priorities[t.priority].label}</span>
+                      {t.dueDate && <span className={`text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 ${isOverdue(t.dueDate) ? 'bg-red-100 text-red-600' : 'bg-slate-100 dark:bg-slate-700'}`}><Calendar size={10} />{formatDate(t.dueDate)}</span>}
+                      {t.assignee && <span className="text-[10px] px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-700 flex items-center gap-1"><span className={`w-3 h-3 rounded-full ${getAvatarColor(t.assignee)} text-white flex items-center justify-center text-[8px]`}>{getInitials(t.assignee)}</span>{t.assignee}</span>}
+                      {(t.tags || []).map(tag => { const tc = getTagColor(tag); return <span key={tag} className={`text-[10px] px-1.5 py-0.5 rounded ${tc.bg} ${tc.text}`}>#{tag}</span>; })}
+                    </div>
+                  </div>
+                  <select value={t.status} onChange={(e) => onMoveTask(t.id, e.target.value)} className={`text-[10px] px-2 py-1 rounded border ${col.accent} bg-white dark:bg-slate-800`}>
+                    {columns.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </select>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg p-6 text-white shadow-sm">
+        <div className="flex items-center gap-3 mb-2"><Target size={24} /><h2 className="text-xl font-semibold">Focus du jour</h2></div>
+        <p className="text-sm opacity-90 capitalize">{todayDate}</p>
+        <div className="mt-4 flex items-center gap-4 text-sm flex-wrap">
+          <div><span className="text-2xl font-bold">{totalFocus}</span> <span className="opacity-75">à traiter</span></div>
+          {overdueTasks.length > 0 && <div className="px-3 py-1 bg-white/20 rounded-full text-xs">⚠ {overdueTasks.length} en retard</div>}
+          {urgentTasks.length > 0 && <div className="px-3 py-1 bg-white/20 rounded-full text-xs">⚡ {urgentTasks.length} urgent</div>}
+        </div>
+      </div>
+      {totalFocus === 0 ? (
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-12 text-center">
+          <div className="text-6xl mb-4">🎉</div><h3 className="text-lg font-medium mb-2">Rien au programme !</h3>
+          <p className="text-sm text-slate-500">Tu es à jour.</p>
+        </div>
+      ) : (
+        <>
+          {renderSection('En retard', overdueTasks, <Clock size={16} />, 'bg-red-50 text-red-700')}
+          {renderSection("Pour aujourd'hui", todayTasks, <Target size={16} />, 'bg-orange-50 text-orange-700')}
+          {renderSection('Urgences', urgentTasks, <Zap size={16} />, 'bg-amber-50 text-amber-700')}
+          {renderSection('En cours', inProgressTasks, <Circle size={16} />, 'bg-blue-50 text-blue-700')}
+        </>
+      )}
+    </div>
+  );
+}
+
+function DashboardView({ activeProject, tasks, columns, priorities, getTagColor, getAvatarColor, getInitials, isOverdue }) {
+  if (!activeProject) return null;
+  const total = tasks.length;
+  const byStatus = columns.map(c => ({ ...c, count: tasks.filter(t => t.status === c.id).length }));
+  const byPriority = Object.entries(priorities).map(([k, v]) => ({ key: k, ...v, count: tasks.filter(t => t.priority === k).length }));
+  const tagCounts = {};
+  tasks.forEach(t => (t.tags || []).forEach(tag => { tagCounts[tag] = (tagCounts[tag] || 0) + 1; }));
+  const topTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  const assigneeCounts = {};
+  tasks.forEach(t => { const key = t.assignee || 'Non assigné'; assigneeCounts[key] = (assigneeCounts[key] || 0) + 1; });
+  const assigneeList = Object.entries(assigneeCounts).sort((a, b) => b[1] - a[1]);
+  const overdue = tasks.filter(t => isOverdue(t.dueDate) && t.status !== 'done').length;
+  const totalHours = tasks.reduce((sum, t) => sum + (parseFloat(t.estimatedHours) || 0), 0);
+  const doneHours = tasks.filter(t => t.status === 'done').reduce((sum, t) => sum + (parseFloat(t.estimatedHours) || 0), 0);
+  const maxStatusCount = Math.max(...byStatus.map(s => s.count), 1);
+  const maxPriorityCount = Math.max(...byPriority.map(p => p.count), 1);
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4"><div className="text-xs text-slate-500 uppercase">Total</div><div className="text-2xl font-semibold mt-1">{total}</div></div>
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4"><div className="text-xs text-slate-500 uppercase">Terminées</div><div className="text-2xl font-semibold text-green-600 mt-1">{byStatus.find(s => s.id === 'done').count}</div></div>
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4"><div className="text-xs text-slate-500 uppercase">En retard</div><div className={`text-2xl font-semibold mt-1 ${overdue > 0 ? 'text-red-600' : ''}`}>{overdue}</div></div>
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4"><div className="text-xs text-slate-500 uppercase">Heures</div><div className="text-2xl font-semibold mt-1">{doneHours}<span className="text-sm text-slate-400">/{totalHours}h</span></div></div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <h3 className="text-sm font-semibold mb-4">Par statut</h3>
+          <div className="space-y-3">
+            {byStatus.map(s => (
+              <div key={s.id}>
+                <div className="flex justify-between text-xs mb-1"><span>{s.title}</span><span className="text-slate-500">{s.count}</span></div>
+                <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${(s.count / maxStatusCount) * 100}%`, backgroundColor: s.gantt }} /></div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <h3 className="text-sm font-semibold mb-4">Par priorité</h3>
+          <div className="space-y-3">
+            {byPriority.map(p => (
+              <div key={p.key}>
+                <div className="flex justify-between text-xs mb-1"><span>{p.label}</span><span className="text-slate-500">{p.count}</span></div>
+                <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div className={`h-full rounded-full ${p.key === 'urgent' ? 'bg-red-500' : p.key === 'high' ? 'bg-orange-500' : p.key === 'medium' ? 'bg-blue-500' : 'bg-slate-400'}`} style={{ width: `${(p.count / maxPriorityCount) * 100}%` }} /></div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {assigneeList.length > 0 && (
+          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+            <h3 className="text-sm font-semibold mb-4">Par personne</h3>
+            <div className="space-y-2">
+              {assigneeList.map(([name, count]) => (
+                <div key={name} className="flex items-center gap-3">
+                  {name === 'Non assigné' ? <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-400 flex items-center justify-center text-xs">?</div> : <div className={`w-8 h-8 rounded-full ${getAvatarColor(name)} text-white flex items-center justify-center text-xs font-medium`}>{getInitials(name)}</div>}
+                  <div className="flex-1">
+                    <div className="flex justify-between text-xs mb-1"><span className="truncate">{name}</span><span className="text-slate-500">{count}</span></div>
+                    <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div className="h-full bg-blue-500" style={{ width: `${(count / total) * 100}%` }} /></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {topTags.length > 0 && (
+          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+            <h3 className="text-sm font-semibold mb-4">Top tags</h3>
+            <div className="flex flex-wrap gap-2">
+              {topTags.map(([tag, count]) => { const tc = getTagColor(tag); return <span key={tag} className={`text-xs px-2.5 py-1.5 rounded-full ${tc.bg} ${tc.text} flex items-center gap-2`}>#{tag}<span className="bg-white/60 dark:bg-black/20 px-1.5 rounded-full text-[10px] font-semibold">{count}</span></span>; })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<ProjectManager />);
+</script>
+</body>
+</html>
