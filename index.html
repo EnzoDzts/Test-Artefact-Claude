@@ -5,26 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Manager</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; background: #f8fafc; }
-  html.dark body { background: #0f172a; color: #f1f5f9; }
+  * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: #fafafa; color: #18181b; }
+  html.dark body { background: #09090b; color: #fafafa; }
+  
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+  html.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
+  html.dark ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+  
   .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
   .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   
-  /* Dark mode manual overrides (pour Tailwind v2 sans dark: variants) */
+  @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .animate-slide-up { animation: slideUp 0.2s ease-out; }
+  .animate-fade-in { animation: fadeIn 0.15s ease-out; }
+  
+  /* Modern palette — Figma/Planner inspired */
+  .bg-app { background-color: #fafafa; }
+  html.dark .bg-app { background-color: #09090b; }
+  .bg-surface { background-color: #ffffff; }
+  html.dark .bg-surface { background-color: #18181b; }
+  .bg-surface-2 { background-color: #f4f4f5; }
+  html.dark .bg-surface-2 { background-color: #27272a; }
+  .bg-surface-hover { background-color: #f4f4f5; }
+  html.dark .bg-surface-hover { background-color: #27272a; }
+  .border-subtle { border-color: #e4e4e7; }
+  html.dark .border-subtle { border-color: #27272a; }
+  .text-primary { color: #18181b; }
+  html.dark .text-primary { color: #fafafa; }
+  .text-secondary { color: #52525b; }
+  html.dark .text-secondary { color: #a1a1aa; }
+  .text-muted { color: #71717a; }
+  html.dark .text-muted { color: #71717a; }
+  
+  /* Dark overrides pour classes Tailwind */
+  html.dark .dark\:bg-zinc-950 { background-color: #09090b; }
+  html.dark .dark\:bg-zinc-900 { background-color: #18181b; }
+  html.dark .dark\:bg-zinc-800 { background-color: #27272a; }
+  html.dark .dark\:bg-zinc-700 { background-color: #3f3f46; }
   html.dark .dark\:bg-slate-900 { background-color: #0f172a; }
   html.dark .dark\:bg-slate-800 { background-color: #1e293b; }
   html.dark .dark\:bg-slate-700 { background-color: #334155; }
-  html.dark .dark\:bg-slate-600 { background-color: #475569; }
+  html.dark .dark\:bg-blue-500\/10 { background-color: rgba(59, 130, 246, 0.1); }
+  html.dark .dark\:bg-blue-500\/20 { background-color: rgba(59, 130, 246, 0.2); }
+  html.dark .dark\:bg-blue-500\/30 { background-color: rgba(59, 130, 246, 0.3); }
   html.dark .dark\:bg-blue-900\/20 { background-color: rgba(30, 58, 138, 0.2); }
   html.dark .dark\:bg-blue-900\/30 { background-color: rgba(30, 58, 138, 0.3); }
   html.dark .dark\:bg-blue-900\/40 { background-color: rgba(30, 58, 138, 0.4); }
-  html.dark .dark\:bg-blue-900\/50 { background-color: rgba(30, 58, 138, 0.5); }
   html.dark .dark\:bg-amber-900\/20 { background-color: rgba(120, 53, 15, 0.2); }
   html.dark .dark\:bg-amber-900\/40 { background-color: rgba(120, 53, 15, 0.4); }
   html.dark .dark\:bg-green-900\/20 { background-color: rgba(20, 83, 45, 0.2); }
@@ -39,14 +78,15 @@
   html.dark .dark\:bg-teal-900\/40 { background-color: rgba(19, 78, 74, 0.4); }
   html.dark .dark\:bg-cyan-900\/40 { background-color: rgba(22, 78, 99, 0.4); }
   html.dark .dark\:bg-rose-900\/40 { background-color: rgba(136, 19, 55, 0.4); }
-  html.dark .dark\:bg-slate-900\/30 { background-color: rgba(15, 23, 42, 0.3); }
-  html.dark .dark\:bg-slate-900\/50 { background-color: rgba(15, 23, 42, 0.5); }
-  html.dark .dark\:bg-slate-700\/50 { background-color: rgba(51, 65, 85, 0.5); }
+  html.dark .dark\:bg-zinc-900\/50 { background-color: rgba(24, 24, 27, 0.5); }
+  html.dark .dark\:bg-zinc-800\/50 { background-color: rgba(39, 39, 42, 0.5); }
   
-  html.dark .dark\:text-slate-100 { color: #f1f5f9; }
-  html.dark .dark\:text-slate-200 { color: #e2e8f0; }
-  html.dark .dark\:text-slate-300 { color: #cbd5e1; }
-  html.dark .dark\:text-slate-400 { color: #94a3b8; }
+  html.dark .dark\:text-zinc-50 { color: #fafafa; }
+  html.dark .dark\:text-zinc-100 { color: #f4f4f5; }
+  html.dark .dark\:text-zinc-200 { color: #e4e4e7; }
+  html.dark .dark\:text-zinc-300 { color: #d4d4d8; }
+  html.dark .dark\:text-zinc-400 { color: #a1a1aa; }
+  html.dark .dark\:text-zinc-500 { color: #71717a; }
   html.dark .dark\:text-white { color: #ffffff; }
   html.dark .dark\:text-blue-300 { color: #93c5fd; }
   html.dark .dark\:text-blue-400 { color: #60a5fa; }
@@ -62,42 +102,45 @@
   html.dark .dark\:text-cyan-300 { color: #67e8f9; }
   html.dark .dark\:text-rose-300 { color: #fda4af; }
   
-  html.dark .dark\:border-slate-600 { border-color: #475569; }
-  html.dark .dark\:border-slate-700 { border-color: #334155; }
+  html.dark .dark\:border-zinc-800 { border-color: #27272a; }
+  html.dark .dark\:border-zinc-700 { border-color: #3f3f46; }
+  html.dark .dark\:border-blue-500\/30 { border-color: rgba(59, 130, 246, 0.3); }
   html.dark .dark\:border-blue-700 { border-color: #1d4ed8; }
   html.dark .dark\:border-blue-800 { border-color: #1e40af; }
-  html.dark .dark\:ring-red-800 { --tw-ring-color: #991b1b; }
-  html.dark .dark\:divide-slate-700 > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
-  html.dark .dark\:hover\:text-slate-100:hover { color: #f1f5f9; }
-  html.dark .dark\:hover\:text-slate-200:hover { color: #e2e8f0; }
-  html.dark .dark\:hover\:text-slate-300:hover { color: #cbd5e1; }
-  html.dark .dark\:hover\:bg-slate-600:hover { background-color: #475569; }
-  html.dark .dark\:hover\:bg-slate-700:hover { background-color: #334155; }
-  html.dark .dark\:hover\:bg-blue-900\/30:hover { background-color: rgba(30, 58, 138, 0.3); }
-  html.dark .dark\:hover\:bg-blue-900\/50:hover { background-color: rgba(30, 58, 138, 0.5); }
-  html.dark .dark\:hover\:bg-slate-900\/50:hover { background-color: rgba(15, 23, 42, 0.5); }
-  html.dark .dark\:hover\:bg-slate-900:hover { background-color: #0f172a; }
-  html.dark .dark\:ring-offset-slate-900 { --tw-ring-offset-color: #0f172a; }
+  html.dark .dark\:divide-zinc-800 > :not([hidden]) ~ :not([hidden]) { border-color: #27272a; }
+  html.dark .dark\:hover\:text-zinc-50:hover { color: #fafafa; }
+  html.dark .dark\:hover\:text-zinc-100:hover { color: #f4f4f5; }
+  html.dark .dark\:hover\:text-zinc-200:hover { color: #e4e4e7; }
+  html.dark .dark\:hover\:bg-zinc-800:hover { background-color: #27272a; }
+  html.dark .dark\:hover\:bg-zinc-800\/50:hover { background-color: rgba(39, 39, 42, 0.5); }
+  html.dark .dark\:hover\:bg-blue-500\/20:hover { background-color: rgba(59, 130, 246, 0.2); }
+  html.dark .dark\:ring-offset-zinc-950 { --tw-ring-offset-color: #09090b; }
+  html.dark .dark\:ring-red-500\/30 { --tw-ring-color: rgba(239, 68, 68, 0.3); }
   
-  /* Utility classes that don't exist in Tailwind v2 */
+  /* Custom utilities */
   .min-h-screen { min-height: 100vh; }
   .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
+  .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
   .from-blue-500 { --tw-gradient-from: #3b82f6; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59, 130, 246, 0)); }
   .to-indigo-600 { --tw-gradient-to: #4f46e5; }
+  .from-violet-500 { --tw-gradient-from: #8b5cf6; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(139, 92, 246, 0)); }
+  .to-purple-600 { --tw-gradient-to: #9333ea; }
   .ring-1 { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), 0 0 #0000; }
   .ring-2 { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), 0 0 #0000; }
-  .ring-red-300 { --tw-ring-color: #fca5a5; }
-  .ring-blue-400 { --tw-ring-color: #60a5fa; }
+  .ring-red-500\/30 { --tw-ring-color: rgba(239, 68, 68, 0.3); }
+  .ring-blue-500 { --tw-ring-color: #3b82f6; }
+  .ring-blue-500\/20 { --tw-ring-color: rgba(59, 130, 246, 0.2); }
   .ring-offset-2 { --tw-ring-offset-width: 2px; }
-  .ring-offset-slate-50 { --tw-ring-offset-color: #f8fafc; }
+  .ring-offset-zinc-50 { --tw-ring-offset-color: #fafafa; }
   .aspect-square { aspect-ratio: 1 / 1; }
   .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
   .transition-colors { transition-property: background-color, border-color, color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
   .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
-  .transition-shadow { transition-property: box-shadow; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+  .transition-shadow { transition-property: box-shadow; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 200ms; }
+  .duration-200 { transition-duration: 200ms; }
   .duration-300 { transition-duration: 300ms; }
-  .accent-blue-500 { accent-color: #3b82f6; }
-  .backdrop-blur { backdrop-filter: blur(8px); }
+  .duration-500 { transition-duration: 500ms; }
+  .accent-blue-600 { accent-color: #2563eb; }
   .gap-0\.5 { gap: 0.125rem; }
   .gap-1\.5 { gap: 0.375rem; }
   .gap-2\.5 { gap: 0.625rem; }
@@ -106,63 +149,84 @@
   .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
   .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
   .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
-  .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
   .mt-1\.5 { margin-top: 0.375rem; }
   .mb-1\.5 { margin-bottom: 0.375rem; }
   .pl-1\.5 { padding-left: 0.375rem; }
   .text-\[10px\] { font-size: 10px; }
-  .text-\[11px\] { font-size: 11px; }
+  .text-\[11px\] { font-size: 11px; line-height: 16px; }
+  .text-\[13px\] { font-size: 13px; line-height: 18px; }
   .text-\[9px\] { font-size: 9px; }
   .text-\[8px\] { font-size: 8px; }
   .min-w-\[200px\] { min-width: 200px; }
-  .min-w-\[150px\] { min-width: 150px; }
-  .min-w-\[120px\] { min-width: 120px; }
+  .min-w-\[260px\] { min-width: 260px; }
   .min-w-\[180px\] { min-width: 180px; }
+  .min-w-\[120px\] { min-width: 120px; }
   .min-w-\[280px\] { min-width: 280px; }
   .min-w-\[320px\] { min-width: 320px; }
-  .min-h-\[60px\] { min-height: 60px; }
-  .min-h-\[100px\] { min-height: 100px; }
+  .min-h-\[72px\] { min-height: 72px; }
+  .min-h-\[120px\] { min-height: 120px; }
   .max-w-sm { max-width: 24rem; }
   .max-w-md { max-width: 28rem; }
   .max-w-lg { max-width: 32rem; }
+  .max-w-xl { max-width: 36rem; }
   .max-w-3xl { max-width: 48rem; }
   .max-w-7xl { max-width: 80rem; }
   .max-h-\[80vh\] { max-height: 80vh; }
   .max-h-\[85vh\] { max-height: 85vh; }
   .w-px { width: 1px; }
   .w-4 { width: 1rem; }
+  .w-5 { width: 1.25rem; }
+  .w-9 { width: 2.25rem; }
   .w-14 { width: 3.5rem; }
   .w-16 { width: 4rem; }
   .w-32 { width: 8rem; }
   .w-48 { width: 12rem; }
+  .w-56 { width: 14rem; }
+  .w-64 { width: 16rem; }
+  .w-72 { width: 18rem; }
   .w-80 { width: 20rem; }
   .h-px { height: 1px; }
   .h-1\.5 { height: 0.375rem; }
   .h-4 { height: 1rem; }
+  .h-5 { height: 1.25rem; }
+  .h-9 { height: 2.25rem; }
+  .h-screen { height: 100vh; }
   .z-10 { z-index: 10; }
   .z-20 { z-index: 20; }
+  .z-30 { z-index: 30; }
+  .z-40 { z-index: 40; }
   .z-50 { z-index: 50; }
   .pt-20 { padding-top: 5rem; }
   .tracking-wide { letter-spacing: 0.025em; }
+  .tracking-tight { letter-spacing: -0.025em; }
+  .tracking-tighter { letter-spacing: -0.05em; }
   .uppercase { text-transform: uppercase; }
   .capitalize { text-transform: capitalize; }
   .whitespace-pre-wrap { white-space: pre-wrap; }
+  .whitespace-nowrap { white-space: nowrap; }
   .cursor-move { cursor: move; }
   .cursor-pointer { cursor: pointer; }
   .cursor-default { cursor: default; }
   .select-none { user-select: none; }
   .opacity-0 { opacity: 0; }
   .opacity-40 { opacity: 0.4; }
+  .opacity-50 { opacity: 0.5; }
   .opacity-60 { opacity: 0.6; }
   .opacity-70 { opacity: 0.7; }
   .opacity-75 { opacity: 0.75; }
+  .opacity-80 { opacity: 0.8; }
   .opacity-90 { opacity: 0.9; }
   .group:hover .group-hover\:opacity-100 { opacity: 1; }
+  .group:hover .group-hover\:text-blue-600 { color: #2563eb; }
+  .group:hover .group-hover\:bg-surface-hover { background-color: #f4f4f5; }
+  html.dark .group:hover .group-hover\:bg-surface-hover { background-color: #27272a; }
   .group\/tag:hover .group-hover\/tag\:opacity-100 { opacity: 1; }
   .group\/st:hover .group-hover\/st\:opacity-100 { opacity: 1; }
   .shrink-0 { flex-shrink: 0; }
   .rotate-90 { transform: rotate(90deg); }
   .rotate-180 { transform: rotate(180deg); }
+  .scale-95 { transform: scale(0.95); }
+  .hover\:scale-105:hover { transform: scale(1.02); }
   .-translate-x-1\/2 { transform: translateX(-50%); }
   .-translate-y-1\/2 { transform: translateY(-50%); }
   .top-1\/2 { top: 50%; }
@@ -177,16 +241,63 @@
   .top-0 { top: 0; }
   .bottom-0 { bottom: 0; }
   .inset-0 { inset: 0; }
-  .bg-black\/50 { background-color: rgba(0, 0, 0, 0.5); }
+  .bg-black\/60 { background-color: rgba(0, 0, 0, 0.6); }
+  .bg-black\/40 { background-color: rgba(0, 0, 0, 0.4); }
+  .bg-white\/10 { background-color: rgba(255, 255, 255, 0.1); }
   .bg-white\/20 { background-color: rgba(255, 255, 255, 0.2); }
   .bg-white\/60 { background-color: rgba(255, 255, 255, 0.6); }
   .bg-black\/20 { background-color: rgba(0, 0, 0, 0.2); }
+  .backdrop-blur-sm { backdrop-filter: blur(4px); }
+  .backdrop-blur { backdrop-filter: blur(8px); }
   .ring-inset { --tw-ring-inset: inset; }
+  .shadow-xs { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04); }
   .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
-  .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-  .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
-  .hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-  kbd { font-family: ui-monospace, monospace; }
+  .shadow-md { box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04); }
+  .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04); }
+  .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+  .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+  .hover\:shadow-md:hover { box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04); }
+  .hover\:shadow-lg:hover { box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08), 0 4px 8px -4px rgba(0, 0, 0, 0.04); }
+  .rounded-xl { border-radius: 0.75rem; }
+  .rounded-2xl { border-radius: 1rem; }
+  .rounded-3xl { border-radius: 1.5rem; }
+  kbd { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+  
+  /* Nav button active state */
+  .nav-btn { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; transition: all 150ms; font-size: 13px; font-weight: 500; color: #52525b; cursor: pointer; border: none; background: transparent; width: 100%; text-align: left; }
+  .nav-btn:hover { background: #f4f4f5; color: #18181b; }
+  html.dark .nav-btn { color: #a1a1aa; }
+  html.dark .nav-btn:hover { background: #27272a; color: #fafafa; }
+  .nav-btn.active { background: #18181b; color: #fafafa; }
+  html.dark .nav-btn.active { background: #fafafa; color: #18181b; }
+  .nav-btn.active:hover { background: #18181b; color: #fafafa; }
+  html.dark .nav-btn.active:hover { background: #fafafa; color: #18181b; }
+  
+  /* Icon button */
+  .icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; color: #52525b; transition: all 150ms; border: none; background: transparent; cursor: pointer; }
+  .icon-btn:hover { background: #f4f4f5; color: #18181b; }
+  html.dark .icon-btn { color: #a1a1aa; }
+  html.dark .icon-btn:hover { background: #27272a; color: #fafafa; }
+  
+  /* Primary button */
+  .btn-primary { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #18181b; color: white; border-radius: 8px; font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: all 150ms; }
+  .btn-primary:hover { background: #27272a; }
+  html.dark .btn-primary { background: #fafafa; color: #18181b; }
+  html.dark .btn-primary:hover { background: #e4e4e7; }
+  
+  .btn-secondary { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: transparent; color: #52525b; border-radius: 8px; font-size: 13px; font-weight: 500; border: 1px solid #e4e4e7; cursor: pointer; transition: all 150ms; }
+  .btn-secondary:hover { background: #f4f4f5; color: #18181b; border-color: #d4d4d8; }
+  html.dark .btn-secondary { color: #a1a1aa; border-color: #27272a; }
+  html.dark .btn-secondary:hover { background: #27272a; color: #fafafa; border-color: #3f3f46; }
+  
+  /* Input */
+  input[type="text"], input[type="url"], input[type="date"], input[type="number"], textarea, select {
+    font-family: inherit;
+  }
+  
+  /* Focus ring */
+  input:focus, textarea:focus, select:focus { outline: none; }
+  .focus-ring:focus-within { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); border-color: #3b82f6; }
 </style>
 </head>
 <body>
@@ -1067,254 +1178,336 @@ function ProjectManager() {
   const getSubProjects = (parentId) => nonArchivedProjects.filter(p => p.parentId === parentId);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 p-4 md:p-6 transition-colors">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <div className="relative">
-              <button onClick={() => setShowProjectDropdown(!showProjectDropdown)} className="flex items-center gap-2 text-2xl md:text-3xl font-semibold text-slate-900 dark:text-slate-100 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-                {activeProject?.parentId && <Folder size={20} className="text-slate-400" />}
-                {activeProject?.name || 'Projet'}
-                <ChevronDown size={24} className={`transition-transform ${showProjectDropdown ? 'rotate-180' : ''}`} />
-              </button>
-              {showProjectDropdown && (
-                <div className="absolute top-full left-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 min-w-[320px] z-20">
-                  <div className="p-2 max-h-96 overflow-y-auto">
-                    {rootProjects.map(project => (
-                      <ProjectTreeItem key={project.id} project={project} depth={0} activeProjectId={activeProjectId} getSubProjects={getSubProjects} onSelect={(id) => { setActiveProjectId(id); setShowProjectDropdown(false); }} onDelete={deleteProject} onArchive={toggleArchiveProject} onAddChild={(parentId) => { setNewProjectParent(parentId); setShowNewProject(true); }} />
-                    ))}
-                    {archivedProjects.length > 0 && (
-                      <div className="border-t border-slate-200 dark:border-slate-700 mt-2 pt-2">
-                        <button onClick={() => setShowArchived(!showArchived)} className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors">
-                          <ChevronRight size={12} className={`transition-transform ${showArchived ? 'rotate-90' : ''}`} />
-                          <Archive size={12} /> Archivés ({archivedProjects.length})
-                        </button>
-                        {showArchived && archivedProjects.map(p => (
-                          <div key={p.id} className="group flex items-center justify-between px-3 py-2 ml-4 rounded hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer opacity-60" onClick={() => { setActiveProjectId(p.id); setShowProjectDropdown(false); }}>
-                            <span className="text-xs text-slate-600 dark:text-slate-400 truncate flex-1">{p.name}</span>
-                            <div className="flex gap-1 opacity-0 group-hover:opacity-100">
-                              <button onClick={(e) => { e.stopPropagation(); toggleArchiveProject(p.id); }} className="text-slate-400 hover:text-blue-500"><Folder size={12} /></button>
-                              <button onClick={(e) => { e.stopPropagation(); deleteProject(p.id); }} className="text-slate-400 hover:text-red-500"><Trash2 size={12} /></button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <div className="border-t border-slate-200 dark:border-slate-700 p-2 space-y-1">
-                    {showNewProject ? (
-                      <div>
-                        {newProjectParent && <div className="text-xs text-slate-500 mb-1 px-2">Sous-projet de : <span className="font-medium">{projects.find(p => p.id === newProjectParent)?.name}</span><button onClick={() => setNewProjectParent(null)} className="ml-2 text-slate-400 hover:text-red-500"><X size={10} className="inline" /></button></div>}
-                        <div className="flex gap-2">
-                          <input type="text" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addProject(); if (e.key === 'Escape') { setShowNewProject(false); setNewProjectName(''); setNewProjectParent(null); } }} autoFocus placeholder="Nom du projet" className="flex-1 px-3 py-1.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none focus:border-blue-400" />
-                          <button onClick={addProject} className="p-1.5 bg-blue-500 text-white rounded hover:bg-blue-600"><Check size={14} /></button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <button onClick={() => setShowNewProject(true)} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"><FolderPlus size={14} /> Nouveau projet vide</button>
-                        <button onClick={() => { setShowTemplates(true); setShowProjectDropdown(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"><Sparkles size={14} /> Depuis un template</button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )}
+    <div className="flex h-screen bg-app overflow-hidden">
+      {/* Sidebar */}
+      <aside className="w-64 shrink-0 bg-surface border-r border-subtle flex flex-col">
+        {/* Logo / Header */}
+        <div className="p-4 border-b border-subtle">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-sm">
+              <Sparkles size={18} className="text-white" />
             </div>
-
-            <div className="flex items-center gap-2 flex-wrap">
-              <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-medium ${syncStatus === 'online' ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300' : syncStatus === 'offline' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'}`} title={syncStatus === 'online' ? 'Synchronisé avec la base partagée' : syncStatus === 'offline' ? 'Mode hors-ligne (stockage local)' : 'Connexion en cours...'}>
-                <span className={`w-1.5 h-1.5 rounded-full ${syncStatus === 'online' ? 'bg-green-500 animate-pulse' : syncStatus === 'offline' ? 'bg-amber-500' : 'bg-slate-400'}`} />
-                {syncStatus === 'online' ? 'Partagé' : syncStatus === 'offline' ? 'Hors ligne' : '...'}
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-semibold text-primary tracking-tight">Project Manager</div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className={`w-1.5 h-1.5 rounded-full ${syncStatus === 'online' ? 'bg-green-500 animate-pulse' : syncStatus === 'offline' ? 'bg-amber-500' : 'bg-zinc-400'}`} />
+                <span className="text-[11px] text-muted">{syncStatus === 'online' ? 'Synchronisé' : syncStatus === 'offline' ? 'Hors ligne' : 'Connexion...'}</span>
               </div>
-              <div className="flex bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-1">
-                <button onClick={() => setViewMode('focus')} className={`p-1.5 rounded ${viewMode === 'focus' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Focus"><Target size={16} /></button>
-                <button onClick={() => setViewMode('kanban')} className={`p-1.5 rounded ${viewMode === 'kanban' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Kanban"><LayoutGrid size={16} /></button>
-                <button onClick={() => setViewMode('list')} className={`p-1.5 rounded ${viewMode === 'list' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Liste"><List size={16} /></button>
-                <button onClick={() => setViewMode('calendar')} className={`p-1.5 rounded ${viewMode === 'calendar' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Calendrier"><CalendarDays size={16} /></button>
-                <button onClick={() => setViewMode('gantt')} className={`p-1.5 rounded ${viewMode === 'gantt' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Gantt"><BarChart3 size={16} /></button>
-                <button onClick={() => setViewMode('dashboard')} className={`p-1.5 rounded ${viewMode === 'dashboard' ? 'bg-slate-100 dark:bg-slate-700' : 'text-slate-500'}`} title="Dashboard"><TrendingUp size={16} /></button>
-              </div>
-
-              <button onClick={() => setShowCommandPalette(true)} className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" title="⌘K"><Search size={14} /><span className="hidden sm:inline text-xs">⌘K</span></button>
-
-              <div className="relative">
-                <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                  <Bell size={14} />
-                  {notifications.length > 0 && <span className={`absolute -top-1 -right-1 w-4 h-4 text-[9px] font-bold text-white rounded-full flex items-center justify-center ${notifications.some(n => n.severity === 3) ? 'bg-red-500 animate-pulse' : notifications.some(n => n.severity === 2) ? 'bg-orange-500' : 'bg-blue-500'}`}>{notifications.length > 9 ? '9+' : notifications.length}</span>}
-                </button>
-                {showNotifications && (
-                  <div className="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 w-80 max-h-96 overflow-y-auto z-20">
-                    <div className="p-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                      <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Notifications</h3>
-                      {typeof Notification !== 'undefined' && Notification.permission !== 'granted' && <button onClick={requestNotificationPermission} className="text-[10px] text-blue-500 hover:underline">Activer push</button>}
-                    </div>
-                    {notifications.length === 0 ? <p className="text-xs text-slate-400 text-center py-8">Rien à signaler ✨</p> : (
-                      <div className="divide-y divide-slate-200 dark:divide-slate-700">
-                        {notifications.map((n, idx) => (
-                          <div key={idx} className="p-3 hover:bg-slate-50 dark:hover:bg-slate-900/50 cursor-pointer" onClick={() => { setShowNotifications(false); setExpandedTask(n.task.id); }}>
-                            <div className="flex items-start gap-2">
-                              <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${n.type === 'overdue' ? 'bg-red-100 text-red-600' : n.type === 'today' ? 'bg-orange-100 text-orange-600' : n.type === 'urgent' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
-                                {n.type === 'urgent' ? <Zap size={12} /> : n.type === 'overdue' ? <Clock size={12} /> : <Calendar size={12} />}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="text-xs font-medium text-slate-900 dark:text-slate-100 truncate">{n.task.title}</div>
-                                <div className={`text-[11px] mt-0.5 ${n.severity === 3 ? 'text-red-600' : n.severity === 2 ? 'text-orange-600' : 'text-blue-600'}`}>{n.message}</div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <button onClick={() => setShowActivity(true)} className="p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" title="Historique"><History size={14} /></button>
-              <button onClick={() => setShowTeamModal(true)} className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                <Users size={14} /><span className="hidden sm:inline">Équipe</span>
-                {activeProject?.team?.length > 0 && <span className="text-xs bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-full">{activeProject.team.length}</span>}
-              </button>
-
-              <div className="relative">
-                <button onClick={() => setShowExportMenu(!showExportMenu)} className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                  <Download size={14} /><span className="hidden sm:inline">Export</span><ChevronDown size={12} />
-                </button>
-                {showExportMenu && (
-                  <div className="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 min-w-[200px] z-20 overflow-hidden">
-                    <button onClick={exportToPDF} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700"><FileText size={14} className="text-red-500" /> PDF</button>
-                    <button onClick={exportToCSV} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 border-t border-slate-200 dark:border-slate-700"><FileSpreadsheet size={14} className="text-green-500" /> CSV</button>
-                    <button onClick={exportJSON} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 border-t border-slate-200 dark:border-slate-700"><FileText size={14} className="text-blue-500" /> Backup JSON</button>
-                    <label className="w-full flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 border-t border-slate-200 dark:border-slate-700 cursor-pointer"><Upload size={14} className="text-purple-500" /> Importer JSON<input type="file" accept=".json" onChange={importJSON} className="hidden" /></label>
-                  </div>
-                )}
-              </div>
-
-              <button onClick={() => setShowSettings(true)} className="p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" title="Paramètres"><Settings size={14} /></button>
             </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input ref={searchInputRef} type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Rechercher..." className="w-full pl-9 pr-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:border-blue-400" />
-              {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"><X size={14} /></button>}
-            </div>
-            <button onClick={() => setShowFilters(!showFilters)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm border transition-colors ${showFilters || filterPriority !== 'all' || filterTag !== 'all' || filterAssignee !== 'all' ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-300 text-blue-700' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700'}`}>
-              <Filter size={14} /> Filtres
-            </button>
-          </div>
-
-          {showFilters && (
-            <div className="flex flex-wrap gap-2 mb-3 p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-              <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className="text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none">
-                <option value="all">Toutes priorités</option>
-                {Object.entries(priorities).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-              </select>
-              <select value={filterTag} onChange={(e) => setFilterTag(e.target.value)} className="text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none">
-                <option value="all">Tous les tags</option>
-                {allTags.map(tag => <option key={tag} value={tag}>#{tag}</option>)}
-              </select>
-              <select value={filterAssignee} onChange={(e) => setFilterAssignee(e.target.value)} className="text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:outline-none">
-                <option value="all">Tout le monde</option>
-                <option value="unassigned">Non assigné</option>
-                {(activeProject?.team || []).map(m => <option key={m} value={m}>{m}</option>)}
-              </select>
-            </div>
-          )}
-
-          <div className="flex flex-wrap items-center gap-4 text-sm">
-            <div className="text-slate-600 dark:text-slate-400"><span className="font-medium text-slate-900 dark:text-slate-100">{stats.done}</span>/{stats.total} tâches</div>
-            {stats.dueToday > 0 && <div className="text-orange-600 font-medium flex items-center gap-1"><Target size={12} /> {stats.dueToday} aujourd'hui</div>}
-            {stats.overdue > 0 && <div className="text-red-600 font-medium flex items-center gap-1"><Clock size={12} /> {stats.overdue} en retard</div>}
-            <div className="flex items-center gap-2 flex-1 min-w-[150px] max-w-sm">
-              <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-green-500 transition-all duration-300" style={{ width: `${stats.progress}%` }} />
-              </div>
-              <div className="text-sm font-medium text-slate-900 dark:text-slate-100">{stats.progress}%</div>
-            </div>
-            <button onClick={() => setShowShortcuts(true)} className="text-xs text-slate-400 hover:text-slate-600 flex items-center gap-1"><Keyboard size={12} /> Raccourcis</button>
           </div>
         </div>
 
-        {showTemplates && <TemplatesModal templates={templates} onSelect={createFromTemplate} onClose={() => setShowTemplates(false)} />}
-        {showSettings && <SettingsModal settings={settings} onSave={saveSettings} onClose={() => setShowSettings(false)} onRequestNotif={requestNotificationPermission} />}
-        {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
-        {showActivity && <ActivityModal activity={activeProject?.activity || []} onClose={() => setShowActivity(false)} />}
-        {showCommandPalette && <CommandPalette projects={nonArchivedProjects} onSelectProject={(id) => { setActiveProjectId(id); setShowCommandPalette(false); }} onViewChange={(v) => { setViewMode(v); setShowCommandPalette(false); }} onNewTask={() => { setShowNewTask('todo'); setShowCommandPalette(false); }} onNewProject={() => { setShowTemplates(true); setShowCommandPalette(false); }} onClose={() => setShowCommandPalette(false)} />}
-
-        {showTeamModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowTeamModal(false)}>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Équipe du projet</h2>
-                <button onClick={() => setShowTeamModal(false)}><X size={20} /></button>
-              </div>
-              <div className="flex gap-2 mb-4">
-                <input type="text" value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addTeamMember()} placeholder="Nom du membre" className="flex-1 px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:border-blue-400" />
-                <button onClick={addTeamMember} className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm">Ajouter</button>
-              </div>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {(activeProject?.team || []).length === 0 ? <p className="text-sm text-slate-400 text-center py-4">Aucun membre</p> : (activeProject?.team || []).map(member => (
-                  <div key={member} className="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-900 rounded">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full ${getAvatarColor(member)} text-white flex items-center justify-center text-xs font-medium`}>{getInitials(member)}</div>
-                      <span className="text-sm">{member}</span>
-                    </div>
-                    <button onClick={() => removeTeamMember(member)} className="text-slate-400 hover:text-red-500"><Trash2 size={14} /></button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {viewMode === 'focus' && <FocusView tasks={activeProject?.tasks || []} columns={columns} priorities={priorities} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} onMoveTask={moveTask} getTagColor={getTagColor} />}
-
-        {viewMode === 'kanban' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {columns.map(column => {
-              const columnTasks = getTasksByStatus(column.id);
-              const isDropTarget = dragOverColumn === column.id;
+        {/* Navigation Views */}
+        <div className="p-3 border-b border-subtle">
+          <div className="text-[11px] font-semibold text-muted uppercase tracking-wide px-3 mb-2">Vues</div>
+          <div className="space-y-0.5">
+            {[
+              { id: 'focus', label: 'Focus du jour', icon: Target },
+              { id: 'kanban', label: 'Tableau Kanban', icon: LayoutGrid },
+              { id: 'list', label: 'Liste', icon: List },
+              { id: 'calendar', label: 'Calendrier', icon: CalendarDays },
+              { id: 'gantt', label: 'Chronologie', icon: BarChart3 },
+              { id: 'dashboard', label: 'Tableau de bord', icon: TrendingUp }
+            ].map(v => {
+              const IconC = v.icon;
               return (
-                <div key={column.id} className={`${column.color} rounded-lg p-3 transition-all ${isDropTarget ? 'ring-2 ring-blue-400' : ''}`} onDragOver={(e) => handleDragOver(e, column.id)} onDragLeave={handleDragLeave} onDrop={(e) => handleDrop(e, column.id)}>
-                  <div className="flex items-center justify-between mb-3 px-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-medium text-sm">{column.title}</h3>
-                      <span className="text-xs bg-white dark:bg-slate-900 px-2 py-0.5 rounded-full">{columnTasks.length}</span>
-                    </div>
-                    <button onClick={() => setShowNewTask(column.id)} className="p-1 hover:bg-white dark:hover:bg-slate-900 rounded"><Plus size={16} /></button>
-                  </div>
-                  <div className="space-y-2 min-h-[100px]">
-                    {showNewTask === column.id && <NewTaskForm newTask={newTask} setNewTask={setNewTask} onSave={() => addTask(column.id)} onCancel={() => { setShowNewTask(null); setNewTask(defaultNewTask); }} priorities={priorities} recurrenceOptions={recurrenceOptions} team={activeProject?.team || []} />}
-                    {columnTasks.map(task => (
-                      <TaskCard key={task.id} task={task} column={column} isExpanded={expandedTask === task.id} isEditing={editingTask === task.id} onExpand={() => setExpandedTask(expandedTask === task.id ? null : task.id)} onEdit={() => setEditingTask(task.id)} onEditDone={() => setEditingTask(null)} onDelete={() => deleteTask(task.id)} onDuplicate={() => duplicateTask(task)} onUpdate={(updates) => updateTask(task.id, updates)} onDragStart={handleDragStart} onAddSubtask={(title) => addSubtask(task.id, title)} onToggleSubtask={(sid) => toggleSubtask(task.id, sid)} onDeleteSubtask={(sid) => deleteSubtask(task.id, sid)} onAddTag={(tag) => addTag(task.id, tag)} onRemoveTag={(tag) => removeTag(task.id, tag)} priorities={priorities} recurrenceOptions={recurrenceOptions} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} team={activeProject?.team || []} />
-                    ))}
-                    {columnTasks.length === 0 && showNewTask !== column.id && <div className="text-xs text-slate-400 text-center py-8">Glisse une tâche ici</div>}
-                  </div>
-                </div>
+                <button key={v.id} onClick={() => setViewMode(v.id)} className={`nav-btn ${viewMode === v.id ? 'active' : ''}`}>
+                  <IconC size={16} />
+                  <span>{v.label}</span>
+                </button>
               );
             })}
           </div>
-        )}
+        </div>
 
-        {viewMode === 'list' && (
-          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
-            {filteredTasks.length === 0 ? <div className="text-center py-12 text-slate-400">Aucune tâche</div> : (
-              <div className="divide-y divide-slate-200 dark:divide-slate-700">
-                {filteredTasks.sort((a, b) => priorities[b.priority].order - priorities[a.priority].order).map(task => {
-                  const column = columns.find(c => c.id === task.status);
-                  return <ListRow key={task.id} task={task} column={column} onMove={(status) => moveTask(task.id, status)} onDelete={() => deleteTask(task.id)} onDuplicate={() => duplicateTask(task)} onToggleSubtask={(sid) => toggleSubtask(task.id, sid)} isExpanded={expandedTask === task.id} onExpand={() => setExpandedTask(expandedTask === task.id ? null : task.id)} columns={columns} priorities={priorities} recurrenceOptions={recurrenceOptions} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} />;
-                })}
+        {/* Projects */}
+        <div className="flex-1 p-3 overflow-y-auto">
+          <div className="flex items-center justify-between px-3 mb-2">
+            <div className="text-[11px] font-semibold text-muted uppercase tracking-wide">Projets</div>
+            <button onClick={() => setShowTemplates(true)} className="icon-btn" style={{width: 24, height: 24}} title="Nouveau projet">
+              <Plus size={14} />
+            </button>
+          </div>
+          <div className="space-y-0.5">
+            {rootProjects.map(project => (
+              <SidebarProjectItem key={project.id} project={project} depth={0} activeProjectId={activeProjectId} getSubProjects={getSubProjects} onSelect={setActiveProjectId} onDelete={deleteProject} onArchive={toggleArchiveProject} onAddChild={(parentId) => { setNewProjectParent(parentId); setShowNewProject(true); }} />
+            ))}
+            {showNewProject && (
+              <div className="px-3 py-2">
+                {newProjectParent && <div className="text-[11px] text-muted mb-1">Dans : {projects.find(p => p.id === newProjectParent)?.name}</div>}
+                <div className="flex gap-1">
+                  <input type="text" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addProject(); if (e.key === 'Escape') { setShowNewProject(false); setNewProjectName(''); setNewProjectParent(null); } }} autoFocus placeholder="Nom du projet" className="flex-1 px-2 py-1 text-[13px] bg-surface-2 border border-subtle rounded-lg focus-ring" />
+                  <button onClick={addProject} className="w-7 h-7 flex items-center justify-center bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg"><Check size={12} /></button>
+                </div>
+              </div>
+            )}
+            {archivedProjects.length > 0 && (
+              <>
+                <button onClick={() => setShowArchived(!showArchived)} className="nav-btn mt-2">
+                  <Archive size={14} />
+                  <span className="flex-1">Archivés</span>
+                  <span className="text-[11px] text-muted">{archivedProjects.length}</span>
+                </button>
+                {showArchived && archivedProjects.map(p => (
+                  <div key={p.id} className="group flex items-center gap-2 px-3 py-1.5 ml-4 rounded-lg hover:bg-surface-hover cursor-pointer opacity-60" onClick={() => setActiveProjectId(p.id)}>
+                    <Folder size={12} className="text-muted" />
+                    <span className="text-[13px] text-secondary truncate flex-1">{p.name}</span>
+                    <button onClick={(e) => { e.stopPropagation(); toggleArchiveProject(p.id); }} className="opacity-0 group-hover:opacity-100 text-muted hover:text-blue-500" title="Restaurer"><Folder size={11} /></button>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Footer actions */}
+        <div className="p-3 border-t border-subtle space-y-0.5">
+          <button onClick={() => setShowCommandPalette(true)} className="nav-btn">
+            <Search size={16} />
+            <span className="flex-1">Commandes</span>
+            <kbd className="text-[10px] px-1.5 py-0.5 bg-surface-2 rounded border border-subtle">⌘K</kbd>
+          </button>
+          <button onClick={() => setShowShortcuts(true)} className="nav-btn">
+            <Keyboard size={16} />
+            <span>Raccourcis</span>
+          </button>
+          <button onClick={() => setShowSettings(true)} className="nav-btn">
+            <Settings size={16} />
+            <span>Paramètres</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto">
+        <div className="max-w-7xl mx-auto p-6 md:p-8">
+          {/* Page Header */}
+          <div className="mb-6">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 text-[13px] text-muted mb-2">
+                  <Folder size={12} />
+                  <span>Projets</span>
+                  {activeProject?.parentId && <>
+                    <span>/</span>
+                    <span>{projects.find(p => p.id === activeProject.parentId)?.name}</span>
+                  </>}
+                </div>
+                <h1 className="text-3xl font-bold text-primary tracking-tight">{activeProject?.name || 'Projet'}</h1>
+                <div className="flex items-center gap-3 mt-2 text-[13px]">
+                  <span className="text-secondary"><span className="font-semibold text-primary">{stats.done}</span><span className="text-muted">/</span>{stats.total} tâches</span>
+                  {stats.dueToday > 0 && <span className="text-orange-600 font-medium flex items-center gap-1"><Target size={12} /> {stats.dueToday} aujourd'hui</span>}
+                  {stats.overdue > 0 && <span className="text-red-600 font-medium flex items-center gap-1"><Clock size={12} /> {stats.overdue} en retard</span>}
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-1">
+                <div className="relative">
+                  <button onClick={() => setShowNotifications(!showNotifications)} className="icon-btn relative">
+                    <Bell size={16} />
+                    {notifications.length > 0 && <span className={`absolute top-1.5 right-1.5 w-2 h-2 rounded-full ${notifications.some(n => n.severity === 3) ? 'bg-red-500 animate-pulse' : notifications.some(n => n.severity === 2) ? 'bg-orange-500' : 'bg-blue-500'}`} />}
+                  </button>
+                  {showNotifications && (
+                    <div className="absolute top-full right-0 mt-2 bg-surface rounded-xl shadow-xl border border-subtle w-80 max-h-96 overflow-y-auto z-20 animate-slide-up">
+                      <div className="p-4 border-b border-subtle flex items-center justify-between">
+                        <h3 className="text-sm font-semibold text-primary">Notifications</h3>
+                        {typeof Notification !== 'undefined' && Notification.permission !== 'granted' && <button onClick={requestNotificationPermission} className="text-[11px] text-blue-500 hover:underline font-medium">Activer push</button>}
+                      </div>
+                      {notifications.length === 0 ? <p className="text-[13px] text-muted text-center py-10">Rien à signaler ✨</p> : (
+                        <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                          {notifications.map((n, idx) => (
+                            <div key={idx} className="p-3 hover:bg-surface-hover cursor-pointer" onClick={() => { setShowNotifications(false); setExpandedTask(n.task.id); }}>
+                              <div className="flex items-start gap-2.5">
+                                <div className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center ${n.type === 'overdue' || n.type === 'urgent' ? 'bg-red-50 text-red-600 dark:bg-red-900/40' : n.type === 'today' ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/40' : 'bg-blue-50 text-blue-600 dark:bg-blue-900/40'}`}>
+                                  {n.type === 'urgent' ? <Zap size={13} /> : n.type === 'overdue' ? <Clock size={13} /> : <Calendar size={13} />}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-[13px] font-medium text-primary truncate">{n.task.title}</div>
+                                  <div className={`text-[11px] mt-0.5 ${n.severity === 3 ? 'text-red-600' : n.severity === 2 ? 'text-orange-600' : 'text-blue-600'}`}>{n.message}</div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <button onClick={() => setShowActivity(true)} className="icon-btn" title="Historique"><History size={16} /></button>
+                <button onClick={() => setShowTeamModal(true)} className="btn-secondary">
+                  <Users size={14} />
+                  <span>Équipe</span>
+                  {activeProject?.team?.length > 0 && <span className="text-[11px] bg-surface-2 px-1.5 py-0.5 rounded-md">{activeProject.team.length}</span>}
+                </button>
+                <div className="relative">
+                  <button onClick={() => setShowExportMenu(!showExportMenu)} className="btn-primary">
+                    <Download size={14} /><span>Exporter</span>
+                  </button>
+                  {showExportMenu && (
+                    <div className="absolute top-full right-0 mt-2 bg-surface rounded-xl shadow-xl border border-subtle min-w-[200px] z-20 overflow-hidden animate-slide-up">
+                      <button onClick={exportToPDF} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] hover:bg-surface-hover text-primary"><FileText size={14} className="text-red-500" /> Export PDF</button>
+                      <button onClick={exportToCSV} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] hover:bg-surface-hover border-t border-subtle text-primary"><FileSpreadsheet size={14} className="text-green-500" /> Export CSV</button>
+                      <button onClick={exportJSON} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] hover:bg-surface-hover border-t border-subtle text-primary"><FileText size={14} className="text-blue-500" /> Backup JSON</button>
+                      <label className="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] hover:bg-surface-hover border-t border-subtle cursor-pointer text-primary"><Upload size={14} className="text-purple-500" /> Importer JSON<input type="file" accept=".json" onChange={importJSON} className="hidden" /></label>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div className="mb-5">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-1.5 bg-surface-2 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-violet-500 to-purple-600 transition-all duration-500 rounded-full" style={{ width: `${stats.progress}%` }} />
+                </div>
+                <div className="text-[13px] font-semibold text-primary tabular-nums">{stats.progress}%</div>
+              </div>
+            </div>
+
+            {/* Search & filters */}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative flex-1 min-w-[260px] max-w-md">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                <input ref={searchInputRef} type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Rechercher tâches, tags, personnes..." className="w-full pl-9 pr-3 py-2 text-[13px] bg-surface border border-subtle rounded-lg focus-ring transition-colors" />
+                {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"><X size={14} /></button>}
+              </div>
+              <button onClick={() => setShowFilters(!showFilters)} className={`btn-secondary ${showFilters || filterPriority !== 'all' || filterTag !== 'all' || filterAssignee !== 'all' ? 'ring-2 ring-blue-500/20' : ''}`}>
+                <Filter size={14} /> Filtres
+                {(filterPriority !== 'all' || filterTag !== 'all' || filterAssignee !== 'all') && <span className="text-[10px] bg-blue-500 text-white px-1.5 py-0.5 rounded-md font-semibold">{[filterPriority, filterTag, filterAssignee].filter(f => f !== 'all').length}</span>}
+              </button>
+            </div>
+
+            {showFilters && (
+              <div className="flex flex-wrap gap-2 mt-3 p-3 bg-surface rounded-xl border border-subtle animate-slide-up">
+                <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className="text-[13px] px-3 py-1.5 bg-surface-2 border border-subtle rounded-lg">
+                  <option value="all">Toutes priorités</option>
+                  {Object.entries(priorities).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+                </select>
+                <select value={filterTag} onChange={(e) => setFilterTag(e.target.value)} className="text-[13px] px-3 py-1.5 bg-surface-2 border border-subtle rounded-lg">
+                  <option value="all">Tous les tags</option>
+                  {allTags.map(tag => <option key={tag} value={tag}>#{tag}</option>)}
+                </select>
+                <select value={filterAssignee} onChange={(e) => setFilterAssignee(e.target.value)} className="text-[13px] px-3 py-1.5 bg-surface-2 border border-subtle rounded-lg">
+                  <option value="all">Tout le monde</option>
+                  <option value="unassigned">Non assigné</option>
+                  {(activeProject?.team || []).map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+                {(filterPriority !== 'all' || filterTag !== 'all' || filterAssignee !== 'all') && <button onClick={() => { setFilterPriority('all'); setFilterTag('all'); setFilterAssignee('all'); }} className="text-[13px] px-3 py-1.5 text-muted hover:text-primary">Réinitialiser</button>}
               </div>
             )}
           </div>
-        )}
 
-        {viewMode === 'calendar' && <CalendarView calendarDate={calendarDate} setCalendarDate={setCalendarDate} selectedDate={selectedCalendarDate} setSelectedDate={setSelectedCalendarDate} getDaysInMonth={getDaysInMonth} getTasksForDate={getTasksForDate} filteredTasks={filteredTasks} isSameDay={isSameDay} columns={columns} priorities={priorities} onMoveTask={moveTask} isOverdue={isOverdue} />}
-        {viewMode === 'gantt' && <GanttView tasks={filteredTasks} columns={columns} priorities={priorities} formatDate={formatDate} />}
-        {viewMode === 'dashboard' && <DashboardView activeProject={activeProject} tasks={activeProject?.tasks || []} columns={columns} priorities={priorities} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} isOverdue={isOverdue} />}
+          {/* Modals */}
+          {showTemplates && <TemplatesModal templates={templates} onSelect={createFromTemplate} onClose={() => setShowTemplates(false)} />}
+          {showSettings && <SettingsModal settings={settings} onSave={saveSettings} onClose={() => setShowSettings(false)} onRequestNotif={requestNotificationPermission} />}
+          {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
+          {showActivity && <ActivityModal activity={activeProject?.activity || []} onClose={() => setShowActivity(false)} />}
+          {showCommandPalette && <CommandPalette projects={nonArchivedProjects} onSelectProject={(id) => { setActiveProjectId(id); setShowCommandPalette(false); }} onViewChange={(v) => { setViewMode(v); setShowCommandPalette(false); }} onNewTask={() => { setShowNewTask('todo'); setShowCommandPalette(false); }} onNewProject={() => { setShowTemplates(true); setShowCommandPalette(false); }} onClose={() => setShowCommandPalette(false)} />}
+          {showTeamModal && <TeamModal team={activeProject?.team || []} newMemberName={newMemberName} setNewMemberName={setNewMemberName} onAdd={addTeamMember} onRemove={removeTeamMember} onClose={() => setShowTeamModal(false)} getAvatarColor={getAvatarColor} getInitials={getInitials} />}
 
-        <div className="mt-6 text-xs text-slate-400 text-center">Version HTML standalone · {templates.length} templates · 6 vues · Sauvegarde locale</div>
+          {viewMode === 'focus' && <FocusView tasks={activeProject?.tasks || []} columns={columns} priorities={priorities} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} onMoveTask={moveTask} getTagColor={getTagColor} />}
+
+          {viewMode === 'kanban' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {columns.map(column => {
+                const columnTasks = getTasksByStatus(column.id);
+                const isDropTarget = dragOverColumn === column.id;
+                return (
+                  <div key={column.id} className={`rounded-2xl p-3 transition-all ${isDropTarget ? 'bg-blue-50 dark:bg-blue-500/10 ring-2 ring-blue-500' : 'bg-surface-2'}`} onDragOver={(e) => handleDragOver(e, column.id)} onDragLeave={handleDragLeave} onDrop={(e) => handleDrop(e, column.id)}>
+                    <div className="flex items-center justify-between mb-3 px-2">
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${column.dot}`} />
+                        <h3 className="text-[13px] font-semibold text-primary">{column.title}</h3>
+                        <span className="text-[11px] text-muted font-medium">{columnTasks.length}</span>
+                      </div>
+                      <button onClick={() => setShowNewTask(column.id)} className="icon-btn" style={{width: 26, height: 26}}><Plus size={14} /></button>
+                    </div>
+                    <div className="space-y-2 min-h-[120px]">
+                      {showNewTask === column.id && <NewTaskForm newTask={newTask} setNewTask={setNewTask} onSave={() => addTask(column.id)} onCancel={() => { setShowNewTask(null); setNewTask(defaultNewTask); }} priorities={priorities} recurrenceOptions={recurrenceOptions} team={activeProject?.team || []} />}
+                      {columnTasks.map(task => (
+                        <TaskCard key={task.id} task={task} column={column} isExpanded={expandedTask === task.id} isEditing={editingTask === task.id} onExpand={() => setExpandedTask(expandedTask === task.id ? null : task.id)} onEdit={() => setEditingTask(task.id)} onEditDone={() => setEditingTask(null)} onDelete={() => deleteTask(task.id)} onDuplicate={() => duplicateTask(task)} onUpdate={(updates) => updateTask(task.id, updates)} onDragStart={handleDragStart} onAddSubtask={(title) => addSubtask(task.id, title)} onToggleSubtask={(sid) => toggleSubtask(task.id, sid)} onDeleteSubtask={(sid) => deleteSubtask(task.id, sid)} onAddTag={(tag) => addTag(task.id, tag)} onRemoveTag={(tag) => removeTag(task.id, tag)} priorities={priorities} recurrenceOptions={recurrenceOptions} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} team={activeProject?.team || []} />
+                      ))}
+                      {columnTasks.length === 0 && showNewTask !== column.id && <div className="text-[12px] text-muted text-center py-8 border-2 border-dashed border-subtle rounded-xl">Glisse une tâche</div>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {viewMode === 'list' && (
+            <div className="bg-surface rounded-2xl border border-subtle overflow-hidden shadow-sm">
+              {filteredTasks.length === 0 ? <div className="text-center py-16 text-muted">Aucune tâche</div> : (
+                <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                  {filteredTasks.sort((a, b) => priorities[b.priority].order - priorities[a.priority].order).map(task => {
+                    const column = columns.find(c => c.id === task.status);
+                    return <ListRow key={task.id} task={task} column={column} onMove={(status) => moveTask(task.id, status)} onDelete={() => deleteTask(task.id)} onDuplicate={() => duplicateTask(task)} onToggleSubtask={(sid) => toggleSubtask(task.id, sid)} isExpanded={expandedTask === task.id} onExpand={() => setExpandedTask(expandedTask === task.id ? null : task.id)} columns={columns} priorities={priorities} recurrenceOptions={recurrenceOptions} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} formatDate={formatDate} isOverdue={isOverdue} />;
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {viewMode === 'calendar' && <CalendarView calendarDate={calendarDate} setCalendarDate={setCalendarDate} selectedDate={selectedCalendarDate} setSelectedDate={setSelectedCalendarDate} getDaysInMonth={getDaysInMonth} getTasksForDate={getTasksForDate} filteredTasks={filteredTasks} isSameDay={isSameDay} columns={columns} priorities={priorities} onMoveTask={moveTask} isOverdue={isOverdue} />}
+          {viewMode === 'gantt' && <GanttView tasks={filteredTasks} columns={columns} priorities={priorities} formatDate={formatDate} />}
+          {viewMode === 'dashboard' && <DashboardView activeProject={activeProject} tasks={activeProject?.tasks || []} columns={columns} priorities={priorities} getTagColor={getTagColor} getAvatarColor={getAvatarColor} getInitials={getInitials} isOverdue={isOverdue} />}
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function SidebarProjectItem({ project, depth, activeProjectId, getSubProjects, onSelect, onDelete, onArchive, onAddChild }) {
+  const subProjects = getSubProjects(project.id);
+  const [expanded, setExpanded] = useState(true);
+  const hasChildren = subProjects.length > 0;
+  const isActive = project.id === activeProjectId;
+  return (
+    <>
+      <div className={`group flex items-center gap-1 px-2 py-1.5 rounded-lg cursor-pointer transition-colors ${isActive ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'hover:bg-surface-hover text-secondary'}`} style={{ paddingLeft: `${8 + depth * 14}px` }} onClick={() => onSelect(project.id)}>
+        {hasChildren ? (
+          <button onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }} className="shrink-0 p-0.5 rounded hover:bg-white/10 text-current opacity-70">
+            <ChevronRight size={11} className={`transition-transform ${expanded ? 'rotate-90' : ''}`} />
+          </button>
+        ) : <span className="w-4 shrink-0" />}
+        <Folder size={13} className="shrink-0 opacity-70" />
+        <span className="text-[13px] font-medium truncate flex-1">{project.name}</span>
+        <span className={`text-[10px] font-medium shrink-0 ${isActive ? 'opacity-70' : 'text-muted'}`}>{project.tasks.length}</span>
+        <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-all ml-1">
+          <button onClick={(e) => { e.stopPropagation(); onAddChild(project.id); }} className={`p-0.5 rounded hover:bg-white/10 ${isActive ? 'text-current' : 'text-muted hover:text-primary'}`} title="Sous-projet"><Plus size={11} /></button>
+          <button onClick={(e) => { e.stopPropagation(); onArchive(project.id); }} className={`p-0.5 rounded hover:bg-white/10 ${isActive ? 'text-current' : 'text-muted hover:text-amber-500'}`} title="Archiver"><Archive size={11} /></button>
+          <button onClick={(e) => { e.stopPropagation(); onDelete(project.id); }} className={`p-0.5 rounded hover:bg-white/10 ${isActive ? 'text-current' : 'text-muted hover:text-red-500'}`} title="Supprimer"><Trash2 size={11} /></button>
+        </div>
+      </div>
+      {hasChildren && expanded && subProjects.map(sub => <SidebarProjectItem key={sub.id} project={sub} depth={depth + 1} activeProjectId={activeProjectId} getSubProjects={getSubProjects} onSelect={onSelect} onDelete={onDelete} onArchive={onArchive} onAddChild={onAddChild} />)}
+    </>
+  );
+}
+
+function TeamModal({ team, newMemberName, setNewMemberName, onAdd, onRemove, onClose, getAvatarColor, getInitials }) {
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
+      <div className="bg-surface rounded-2xl shadow-2xl max-w-md w-full p-6 animate-slide-up" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-lg font-semibold text-primary tracking-tight">Équipe du projet</h2>
+          <button onClick={onClose} className="icon-btn"><X size={18} /></button>
+        </div>
+        <div className="flex gap-2 mb-5">
+          <input type="text" value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && onAdd()} placeholder="Nom du membre" className="flex-1 px-3 py-2 text-[13px] bg-surface-2 border border-subtle rounded-lg focus-ring" />
+          <button onClick={onAdd} className="btn-primary">Ajouter</button>
+        </div>
+        <div className="space-y-1.5 max-h-64 overflow-y-auto">
+          {team.length === 0 ? <p className="text-[13px] text-muted text-center py-8">Aucun membre</p> : team.map(member => (
+            <div key={member} className="flex items-center justify-between p-2.5 bg-surface-2 rounded-lg group">
+              <div className="flex items-center gap-2.5">
+                <div className={`w-8 h-8 rounded-full ${getAvatarColor(member)} text-white flex items-center justify-center text-[11px] font-semibold shadow-sm`}>{getInitials(member)}</div>
+                <span className="text-[13px] text-primary font-medium">{member}</span>
+              </div>
+              <button onClick={() => onRemove(member)} className="text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={14} /></button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -1578,71 +1771,80 @@ function TaskCard({ task, column, isExpanded, isEditing, onExpand, onEdit, onEdi
 
   if (isEditing) {
     return (
-      <div className={`bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border-l-4 ${column.accent}`}>
-        <input type="text" value={task.title} onChange={(e) => onUpdate({ title: e.target.value })} onKeyDown={(e) => { if (e.key === 'Enter') onEditDone(); }} autoFocus className="w-full text-sm font-medium bg-transparent border-none focus:outline-none mb-2" />
-        <textarea value={task.description || ''} onChange={(e) => onUpdate({ description: e.target.value })} placeholder="Description" rows={2} className="w-full text-xs bg-transparent border-none focus:outline-none text-slate-600 dark:text-slate-400 resize-none mb-2" />
+      <div className="bg-surface rounded-xl p-3 shadow-md border border-subtle">
+        <input type="text" value={task.title} onChange={(e) => onUpdate({ title: e.target.value })} onKeyDown={(e) => { if (e.key === 'Enter') onEditDone(); }} autoFocus className="w-full text-[13px] font-semibold bg-transparent border-none text-primary mb-2" />
+        <textarea value={task.description || ''} onChange={(e) => onUpdate({ description: e.target.value })} placeholder="Description" rows={2} className="w-full text-[12px] bg-transparent border-none text-secondary resize-none mb-2" />
         <div className="flex gap-2 mb-2 flex-wrap">
-          <select value={task.priority} onChange={(e) => onUpdate({ priority: e.target.value })} className="text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded">
+          <select value={task.priority} onChange={(e) => onUpdate({ priority: e.target.value })} className="text-[11px] px-2 py-1 bg-surface-2 border border-subtle rounded-lg">
             {Object.entries(priorities).map(([key, val]) => <option key={key} value={key}>{val.label}</option>)}
           </select>
-          <input type="number" placeholder="h" min="0" step="0.5" value={task.estimatedHours || ''} onChange={(e) => onUpdate({ estimatedHours: e.target.value })} className="text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded w-16" />
+          <input type="number" placeholder="h" min="0" step="0.5" value={task.estimatedHours || ''} onChange={(e) => onUpdate({ estimatedHours: e.target.value })} className="text-[11px] px-2 py-1 bg-surface-2 border border-subtle rounded-lg w-14" />
         </div>
         <div className="flex gap-2 mb-2">
-          <input type="date" value={task.startDate || ''} onChange={(e) => onUpdate({ startDate: e.target.value })} className="flex-1 text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded" />
-          <input type="date" value={task.dueDate || ''} onChange={(e) => onUpdate({ dueDate: e.target.value })} className="flex-1 text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded" />
+          <input type="date" value={task.startDate || ''} onChange={(e) => onUpdate({ startDate: e.target.value })} className="flex-1 text-[11px] px-2 py-1 bg-surface-2 border border-subtle rounded-lg" />
+          <input type="date" value={task.dueDate || ''} onChange={(e) => onUpdate({ dueDate: e.target.value })} className="flex-1 text-[11px] px-2 py-1 bg-surface-2 border border-subtle rounded-lg" />
         </div>
-        <select value={task.recurrence || 'none'} onChange={(e) => onUpdate({ recurrence: e.target.value })} className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded mb-2">
+        <select value={task.recurrence || 'none'} onChange={(e) => onUpdate({ recurrence: e.target.value })} className="w-full text-[11px] px-2 py-1 bg-surface-2 border border-subtle rounded-lg mb-2">
           {Object.entries(recurrenceOptions).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
         </select>
-        {team.length > 0 && <select value={task.assignee || ''} onChange={(e) => onUpdate({ assignee: e.target.value })} className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded mb-2"><option value="">Non assigné</option>{team.map(m => <option key={m} value={m}>{m}</option>)}</select>}
-        <div className="flex justify-end"><button onClick={onEditDone} className="px-3 py-1 text-xs bg-blue-500 text-white rounded">OK</button></div>
+        {team.length > 0 && <select value={task.assignee || ''} onChange={(e) => onUpdate({ assignee: e.target.value })} className="w-full text-[11px] px-2 py-1 bg-surface-2 border border-subtle rounded-lg mb-2"><option value="">Non assigné</option>{team.map(m => <option key={m} value={m}>{m}</option>)}</select>}
+        <div className="flex justify-end"><button onClick={onEditDone} className="btn-primary text-[12px]">Valider</button></div>
       </div>
     );
   }
 
   return (
-    <div draggable onDragStart={(e) => onDragStart(e, task)} className={`bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border-l-4 ${column.accent} hover:shadow-md transition-shadow cursor-move group ${isUrgent ? 'ring-1 ring-red-300 dark:ring-red-800' : ''}`}>
-      <div className="flex items-start justify-between gap-2 mb-1">
-        <h4 onClick={onExpand} className="text-sm font-medium flex-1 cursor-pointer hover:text-blue-600 flex items-center gap-1">{isUrgent && <Zap size={12} className="text-red-500" />}{task.title}</h4>
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100">
-          <button onClick={onDuplicate} className="p-1 text-slate-400 hover:text-blue-500"><Copy size={12} /></button>
-          <button onClick={onEdit} className="p-1 text-slate-400 hover:text-blue-500"><Edit2 size={12} /></button>
-          <button onClick={onDelete} className="p-1 text-slate-400 hover:text-red-500"><Trash2 size={12} /></button>
+    <div draggable onDragStart={(e) => onDragStart(e, task)} className={`bg-surface rounded-xl p-3 shadow-xs hover:shadow-md transition-all cursor-move group border border-subtle ${isUrgent ? 'ring-1 ring-red-500/30 dark:ring-red-500/30' : ''}`}>
+      <div className="flex items-start justify-between gap-2 mb-1.5">
+        <h4 onClick={onExpand} className="text-[13px] font-semibold text-primary flex-1 cursor-pointer group-hover:text-blue-600 transition-colors leading-snug flex items-center gap-1">{isUrgent && <Zap size={11} className="text-red-500 shrink-0" />}{task.title}</h4>
+        <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button onClick={onDuplicate} className="p-1 text-muted hover:text-blue-500 rounded hover:bg-surface-2" title="Dupliquer"><Copy size={11} /></button>
+          <button onClick={onEdit} className="p-1 text-muted hover:text-blue-500 rounded hover:bg-surface-2" title="Modifier"><Edit2 size={11} /></button>
+          <button onClick={onDelete} className="p-1 text-muted hover:text-red-500 rounded hover:bg-surface-2" title="Supprimer"><Trash2 size={11} /></button>
         </div>
       </div>
-      {task.description && !isExpanded && <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 line-clamp-2">{task.description}</p>}
-      {isExpanded && task.description && <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 whitespace-pre-wrap">{task.description}</p>}
-      <div className="flex items-center gap-1.5 flex-wrap mb-1.5">
-        <span className={`text-xs px-2 py-0.5 rounded-full ${priorities[task.priority].bg} ${priorities[task.priority].color} font-medium`}><Flag size={10} className="inline mr-1" />{priorities[task.priority].label}</span>
-        {task.dueDate && <span className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${isOverdue(task.dueDate) && task.status !== 'done' ? 'bg-red-100 dark:bg-red-900/40 text-red-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'}`}><Calendar size={10} />{formatDate(task.dueDate)}</span>}
-        {task.estimatedHours && <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 flex items-center gap-1"><Clock size={10} />{task.estimatedHours}h</span>}
-        {task.recurrence && task.recurrence !== 'none' && <span className="text-xs px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 flex items-center gap-1"><Repeat size={10} />{recurrenceOptions[task.recurrence]}</span>}
-        {task.assignee && <span className="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center gap-1"><span className={`w-4 h-4 rounded-full ${getAvatarColor(task.assignee)} text-white flex items-center justify-center text-[9px]`}>{getInitials(task.assignee)}</span>{task.assignee}</span>}
-        {subtasksCount > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 flex items-center gap-1"><CheckCircle2 size={10} />{subtasksDone}/{subtasksCount}</span>}
+      {task.description && !isExpanded && <p className="text-[12px] text-secondary mb-2 line-clamp-2 leading-relaxed">{task.description}</p>}
+      {isExpanded && task.description && <p className="text-[12px] text-secondary mb-2 whitespace-pre-wrap leading-relaxed">{task.description}</p>}
+
+      <div className="flex items-center gap-1 flex-wrap mb-1.5">
+        <span className={`text-[10px] px-2 py-0.5 rounded-md ${priorities[task.priority].bg} ${priorities[task.priority].color} font-semibold`}>{priorities[task.priority].label}</span>
+        {task.dueDate && <span className={`text-[10px] px-2 py-0.5 rounded-md flex items-center gap-1 font-medium ${isOverdue(task.dueDate) && task.status !== 'done' ? 'bg-red-50 dark:bg-red-900/40 text-red-600' : 'bg-surface-2 text-secondary'}`}><Calendar size={9} />{formatDate(task.dueDate)}</span>}
+        {task.estimatedHours && <span className="text-[10px] px-2 py-0.5 rounded-md bg-surface-2 text-secondary flex items-center gap-1 font-medium"><Clock size={9} />{task.estimatedHours}h</span>}
+        {task.recurrence && task.recurrence !== 'none' && <span className="text-[10px] px-2 py-0.5 rounded-md bg-teal-50 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 flex items-center gap-1 font-medium"><Repeat size={9} /></span>}
+        {subtasksCount > 0 && <span className="text-[10px] px-2 py-0.5 rounded-md bg-surface-2 text-secondary flex items-center gap-1 font-medium"><CheckCircle2 size={9} />{subtasksDone}/{subtasksCount}</span>}
       </div>
+
       {(task.tags || []).length > 0 && (
         <div className="flex flex-wrap gap-1 mb-1.5">
-          {(task.tags || []).map(tag => { const tc = getTagColor(tag); return <span key={tag} className={`text-xs px-2 py-0.5 rounded-full ${tc.bg} ${tc.text} flex items-center gap-1 group/tag`}>#{tag}<button onClick={() => onRemoveTag(tag)} className="opacity-0 group-hover/tag:opacity-100"><X size={10} /></button></span>; })}
+          {(task.tags || []).map(tag => { const tc = getTagColor(tag); return <span key={tag} className={`text-[10px] px-2 py-0.5 rounded-md ${tc.bg} ${tc.text} flex items-center gap-0.5 group/tag font-medium`}>#{tag}<button onClick={() => onRemoveTag(tag)} className="opacity-0 group-hover/tag:opacity-100 ml-0.5"><X size={9} /></button></span>; })}
         </div>
       )}
+
+      {task.assignee && (
+        <div className="flex items-center gap-1.5 mt-2">
+          <div className={`w-5 h-5 rounded-full ${getAvatarColor(task.assignee)} text-white flex items-center justify-center text-[9px] font-bold shadow-xs`}>{getInitials(task.assignee)}</div>
+          <span className="text-[11px] text-secondary font-medium">{task.assignee}</span>
+        </div>
+      )}
+
       {isExpanded && (
-        <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-3">
+        <div className="mt-3 pt-3 border-t border-subtle space-y-3">
           <div>
-            <div className="text-xs font-medium text-slate-500 mb-1.5 flex items-center gap-1"><CheckCircle2 size={12} /> Sous-tâches</div>
+            <div className="text-[10px] font-semibold text-muted uppercase tracking-wide mb-2 flex items-center gap-1"><CheckCircle2 size={11} /> Sous-tâches</div>
             <div className="space-y-1">
               {(task.subtasks || []).map(s => (
-                <div key={s.id} className="flex items-center gap-2 group/st">
-                  <button onClick={() => onToggleSubtask(s.id)}>{s.done ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className="text-slate-400" />}</button>
-                  <span className={`text-xs flex-1 ${s.done ? 'line-through text-slate-400' : ''}`}>{s.title}</span>
-                  <button onClick={() => onDeleteSubtask(s.id)} className="opacity-0 group-hover/st:opacity-100 text-slate-400 hover:text-red-500"><X size={12} /></button>
+                <div key={s.id} className="flex items-center gap-2 group/st py-0.5">
+                  <button onClick={() => onToggleSubtask(s.id)} className="shrink-0">{s.done ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className="text-muted hover:text-blue-500 transition-colors" />}</button>
+                  <span className={`text-[12px] flex-1 ${s.done ? 'line-through text-muted' : 'text-primary'}`}>{s.title}</span>
+                  <button onClick={() => onDeleteSubtask(s.id)} className="opacity-0 group-hover/st:opacity-100 text-muted hover:text-red-500"><X size={11} /></button>
                 </div>
               ))}
-              <input type="text" value={newSubtask} onChange={(e) => setNewSubtask(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { onAddSubtask(newSubtask); setNewSubtask(''); } }} placeholder="+ sous-tâche" className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded mt-1" />
+              <input type="text" value={newSubtask} onChange={(e) => setNewSubtask(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { onAddSubtask(newSubtask); setNewSubtask(''); } }} placeholder="+ Ajouter une sous-tâche" className="w-full text-[12px] px-2 py-1 bg-surface-2 border border-subtle rounded-lg mt-1" />
             </div>
           </div>
           <div>
-            <div className="text-xs font-medium text-slate-500 mb-1.5 flex items-center gap-1"><Tag size={12} /> Tags</div>
-            <input type="text" value={newTag} onChange={(e) => setNewTag(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { onAddTag(newTag); setNewTag(''); } }} placeholder="+ tag" className="w-full text-xs px-2 py-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded" />
+            <div className="text-[10px] font-semibold text-muted uppercase tracking-wide mb-2 flex items-center gap-1"><Tag size={11} /> Tags</div>
+            <input type="text" value={newTag} onChange={(e) => setNewTag(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { onAddTag(newTag); setNewTag(''); } }} placeholder="+ Ajouter un tag" className="w-full text-[12px] px-2 py-1 bg-surface-2 border border-subtle rounded-lg" />
           </div>
         </div>
       )}
